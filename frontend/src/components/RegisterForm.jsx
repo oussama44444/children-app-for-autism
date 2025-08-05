@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
@@ -14,7 +19,11 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!credentials.emailadress || !credentials.username || !credentials.password) {
-      setError('Please fill in all fields');
+      setError('Veuillez remplir tous les champs');
+      return;
+    }
+    if (!isValidEmail(credentials.emailadress)) {
+      setError('Veuillez entrer une adresse e-mail valide');
       return;
     }
     // Here you would typically make an API call to register the user
@@ -28,30 +37,30 @@ const RegisterForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <div>
-        <p className="flex flex-start font-medium text-center mb-4">Email adress</p>
+        <p className="flex flex-start font-medium text-center mb-4">Adresse e-mail</p>
       <input
-        type="text"
-        placeholder="Enter your email"
+        type="email"
+        placeholder="Entrez votre adresse e-mail"
         className="w-full p-4 border border-teal-200 rounded-full text-base focus:outline-none focus:border-teal-400"
         value={credentials.emailadress}
         onChange={(e) => setCredentials({ ...credentials, emailadress: e.target.value })}
       /></div>
         <div>
-        <p className="flex flex-start font-medium text-center mb-4">User name</p>
+        <p className="flex flex-start font-medium text-center mb-4">Nom d'utilisateur</p>
       <input
         type="text"
-        placeholder="Enter your user name"
+        placeholder="Entrez votre nom d'utilisateur"
         className="w-full p-4 border border-teal-200 rounded-full text-base focus:outline-none focus:border-teal-400"
         value={credentials.username}
         onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
       /></div>
       <div className="relative">
-        <p className='flex flex-start font-medium text-center mb-4'>Password</p>
+        <p className='flex flex-start font-medium text-center mb-4'>Mot de passe</p>
         <input
           type={showPassword ? "text" : "password"}
-          placeholder="Enter your Password"
+          placeholder="Entrez votre mot de passe"
           className="w-full p-4 border border-teal-200 rounded-full  text-base pr-10 focus:outline-none focus:border-teal-400"
           value={credentials.password}
           onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
@@ -80,7 +89,7 @@ const RegisterForm = () => {
         type="submit"
         className="bg-teal-400 text-white p-4 rounded-full hover:bg-teal-500 transition-colors w-full font-medium text-lg mt-2"
       >
-        Register
+        Inscription
       </button>
     </form>
   );

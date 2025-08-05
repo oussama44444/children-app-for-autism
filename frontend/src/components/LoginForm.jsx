@@ -13,7 +13,7 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!credentials.username || !credentials.password) {
-      setError('Please fill in all fields');
+      setError('Veuillez remplir tous les champs');
       return;
     }
     // Here you would typically make an API call to verify credentials
@@ -28,22 +28,22 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
       <div>
-        <p className="flex flex-start font-medium text-center mb-4">User name</p>
+        <p className="flex flex-start font-medium text-center mb-4">Nom d'utilisateur</p>
         <input
           type="text"
-          placeholder="Enter your user name"
+          placeholder="Entrez votre nom d'utilisateur"
           className="w-full p-4 border border-teal-200 rounded-full text-base focus:outline-none focus:border-teal-400"
           value={credentials.username}
           onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
         />
       </div>
       <div className="relative">
-        <p className='flex flex-start font-medium text-center mb-4'>Password</p>
+        <p className='flex flex-start font-medium text-center mb-4'>Mot de passe</p>
         <input
           type={showPassword ? "text" : "password"}
-          placeholder="Enter your Password"
+          placeholder="Entrez votre mot de passe"
           className="w-full p-4 border border-teal-200 rounded-full  text-base pr-10 focus:outline-none focus:border-teal-400"
           value={credentials.password}
           onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
@@ -69,10 +69,10 @@ const LoginForm = () => {
       <div className="flex justify-between items-center text-sm text-gray-600">
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" className="form-checkbox h-4 w-4 text-teal-400 rounded border-gray-300" />
-          <span className="text-gray-600">Remember me</span>
+          <span className="text-gray-600">Se souvenir de moi</span>
         </label>
         <a href="#" className="text-teal-400 hover:text-teal-500">
-          Forgot Password?
+          Mot de passe oublié?
         </a>
       </div>
 
@@ -80,7 +80,7 @@ const LoginForm = () => {
         type="submit"
         className="bg-teal-400 text-white p-4 rounded-full hover:bg-teal-500 transition-colors w-full font-medium text-lg mt-2"
       >
-        Login
+        Connexion
       </button>
     </form>
   );

@@ -27,19 +27,16 @@ export default function Register() {
 
       {/* Right side with form */}
       <div className="w-1/2 flex flex-col justify-center items-center px-16">
-        {/* Tabs */}
-           <div className="text-center mb-8">
-      <h1 className="text-2xl font-bold mb-2">Create your Account!</h1>
-      
-    </div>
-        <div className="flex justify-between w-70 h-15 mb-6 space-x-5  bg-teal-300 rounded-full">
-           
-         <div className='pt-2 pl-2'>
-            <button onClick={handleLoginClick} className="px-8 py-2 text-white rounded-full font-medium hover:bg-teal-500">Login</button>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold mb-2">Créez votre compte!</h1>
+        </div>
+        <div className="flex justify-between w-90 h-15 mb-6 space-x-5 bg-teal-300 rounded-full">
+          <div className='pt-2 pl-2'>
+            <button onClick={handleLoginClick} className="px-8 py-2 text-white rounded-full font-medium hover:bg-teal-500">Connexion</button>
           </div>
-           <div className='pt-2 pr-2'>
-          <button className="px-8 py-2 bg-teal-400 text-white rounded-full font-medium">Register</button></div>
-    
+          <div className='pt-2 pr-2'>
+            <button className="px-8 py-2 bg-teal-400 text-white rounded-full font-medium">Inscription</button>
+          </div>
         </div>
         
         <div className="w-full max-w-md pt-5 ">
