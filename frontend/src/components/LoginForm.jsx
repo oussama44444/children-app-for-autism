@@ -27,24 +27,24 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-6">
+      {error && <p className="text-red-500 text-xs md:text-sm text-center">{error}</p>}
       <div>
-        <p className="flex flex-start font-medium text-center mb-4">Nom d'utilisateur</p>
+        <p className="flex flex-start font-medium text-sm md:text-base mb-3 md:mb-4">Nom d'utilisateur</p>
         <input
           type="text"
           placeholder="Entrez votre nom d'utilisateur"
-          className="w-full p-4 border border-teal-200 rounded-full text-base focus:outline-none focus:border-teal-400"
+          className="w-full p-3 md:p-4 border border-teal-200 rounded-full text-sm md:text-base focus:outline-none focus:border-teal-400"
           value={credentials.username}
           onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
         />
       </div>
       <div className="relative">
-        <p className='flex flex-start font-medium text-center mb-4'>Mot de passe</p>
+        <p className="flex flex-start font-medium text-sm md:text-base mb-3 md:mb-4">Mot de passe</p>
         <input
           type={showPassword ? "text" : "password"}
           placeholder="Entrez votre mot de passe"
-          className="w-full p-4 border border-teal-200 rounded-full  text-base pr-10 focus:outline-none focus:border-teal-400"
+          className="w-full p-3 md:p-4 border border-teal-200 rounded-full text-sm md:text-base pr-10 focus:outline-none focus:border-teal-400"
           value={credentials.password}
           onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
         />
@@ -66,7 +66,7 @@ const LoginForm = () => {
         </button>
       </div>
 
-      <div className="flex justify-between items-center text-sm text-gray-600">
+      <div className="flex justify-between items-center text-xs md:text-sm text-gray-600">
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" className="form-checkbox h-4 w-4 text-teal-400 rounded border-gray-300" />
           <span className="text-gray-600">Se souvenir de moi</span>
@@ -78,7 +78,7 @@ const LoginForm = () => {
 
       <button
         type="submit"
-        className="bg-teal-400 text-white p-4 rounded-full hover:bg-teal-500 transition-colors w-full font-medium text-lg mt-2"
+        className="bg-teal-400 text-white p-3 md:p-4 rounded-full hover:bg-teal-500 transition-colors w-full font-medium text-base md:text-lg mt-2"
       >
         Connexion
       </button>
