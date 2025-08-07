@@ -20,30 +20,30 @@ export default function NavBar() {
               <h1 className="text-2xl font-bold text-teal-600">SVT Platform</h1>
             </div>
             <div className='flex'>
-            <div className="flex pl-30 pr-30 gap-15 text-white items-center">
-                <Link to='/home' >Accueil</Link> 
+            <div className="flex pl-30 pr-30 gap-15  text-white items-center">
+                <Link to='/home' className='hover:scale-110 '>Accueil</Link> 
           
-                <Link to='/course' >Cours</Link>
+                <Link to='/course' className='hover:scale-110 ' >Cours</Link>
            
-                <Link to='/career'  >Carrières</Link>
+                <Link to='/career' className='hover:scale-110 '  >Carrières</Link>
            
-                <Link to='/blog'  >Blog</Link>
+                <Link to='/blog' className='hover:scale-110 '  >Blog</Link>
          
           
-                <Link to='/about'  >À propos de nous</Link>
+                <Link to='/about' className='hover:scale-110 ' >À propos de nous</Link>
             </div>
             <div className="flex items-center  -m-15">
               <button
               type='button'
                 onClick={handleLogin}
-                className="ml-4 px-4 py-2 rounded-full  text-sm font-medium text-black bg-white hover:bg-teal-500"
+                className="ml-4 px-4 py-2 rounded-full hover:scale-110 cursor-pointer  text-sm font-medium text-black bg-white hover:bg-teal-500"
               >
                 Connexion
               </button>
               <button
               type='button'
                 onClick={handleRegister}
-                className="ml-4 px-4 py-2 rounded-full text-sm font-medium text-white bg-customblue hover:bg-teal-500"
+                className="ml-4 px-4 py-2 rounded-full hover:scale-110 cursor-pointer text-sm font-medium text-white bg-customblue hover:bg-teal-500"
               >
                 Inscription
               </button>

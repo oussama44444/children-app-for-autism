@@ -13,6 +13,7 @@ import science from '../assets/Science.png'
 import physicslogo from '../assets/176024-removebg-preview.png'
 import { Navigate , useNavigate } from 'react-router-dom'
 import Features from '../components/Features'
+import LatestCourses from '../components/LatestCourses'
 const row1 = [
   { id: 1, title: "science", color: "from-orange-400 to-orange-300", image: science, price: "$450" },
   { id: 2, title: "physique", color: "from-pink-400 to-pink-300", image: physics, price: "$450" },
@@ -51,34 +52,35 @@ export default function LandingPage() {
         <NavBar />
       </div>
       <Header />
-      <div>
-        
+      <div> 
       </div>
+     
       <Features />
-      <div className="flex justify-end pr-20 mt-2">
+      <div className="flex justify-end pr-20 ">
           <button 
             onClick={HandleExplore}
-            className="text-[#36B3BD] hover:text-teal-600 text-lg pt-30 font-medium"
+            className="text-[#36B3BD] cursor-pointer hover:scale-101 hover:text-teal-600 text-lg  font-medium"
           >
             Explorer les cours &rarr;
           </button>
         </div>
       <div className='pl-10 flex '>
         <img className='h-10' src={sciencelogo} alt="" />
-        <p className='font-bold text-2xl'>Cours de Science</p>
+        <p className='font-bold text-2xl'>Cours 1 ére année</p>
       </div>
      <ExploreCourses courses={row1} />
+    
        <div className='pl-10 flex '>
         <img className='h-10' src={mathlogo} alt="" />
-        <p className='font-bold text-2xl'>Cours de Math</p>
+        <p className='font-bold text-2xl'>Cours 2 éme année</p>
       </div>
      <ExploreCourses courses={row2} />
        <div className='pl-10 flex '>
         <img className='h-10' src={physicslogo} alt="" />
-        <p className='font-bold text-2xl'>Cours de physique</p>
+        <p className='font-bold text-2xl'>Cours 3 éme année </p>
       </div>
      <ExploreCourses courses={row2} />
-      
+      <LatestCourses />
       <Footer />
     </div>
   )

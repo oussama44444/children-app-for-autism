@@ -10,7 +10,8 @@ import { LayoutGrid, MonitorSmartphone, Users2 } from 'lucide-react';
 import featimg from '../assets/upscalemedia-transformed (1).png'
 import student from '../assets/gettyimages-2105091005.jpg'
 import call from '../assets/sTKfkjXZCccZzvIvkSUIjU4UVZL9WgNNP7gE3C7j.jpeg'
-
+import level from '../assets/upscalemedia-transformed (3).png'
+import { useState } from 'react';
 const classfeatures = [
     {
       icon: <LayoutGrid className="text-indigo-600 w-5 h-5" />,
@@ -50,6 +51,8 @@ const feature = [
 ];
 
 export default function Features() {
+    const [showAll, setShowAll] = useState(false);
+    
   return (
     <div className="py-12 px-6 md:px-20 bg-white text-center">
       <h2 className="text-3xl font-bold text-gray-800">
@@ -88,7 +91,7 @@ export default function Features() {
     />
     <div className="absolute inset-0  bg-opacity-50 flex flex-col items-center justify-center text-white p-6">
       <h2 className="text-2xl font-bold mb-4">Pour les enseignants</h2>
-      <button className=" text-white border border-white   font-semibold px-6 py-5 rounded-full hover:bg-gray-400 transition">
+      <button className=" text-white border border-white cursor-pointer   font-semibold px-6 py-5 rounded-full hover:bg-gray-400 transition">
         Commencer une classe aujourd’hui
       </button>
     </div>
@@ -103,13 +106,14 @@ export default function Features() {
     />
     <div className="absolute inset-0  bg-opacity-50 flex flex-col items-center justify-center text-white p-6">
       <h2 className="text-2xl font-bold mb-4">Pour les étudiants</h2>
-      <button className="bg-blue-500 text-black font-semibold px-6 py-5 rounded-full hover:bg-gray-200 transition">
+      <button className="bg-blue-500 text-black cursor-pointer font-semibold px-6 py-5 rounded-full hover:bg-gray-200 transition">
         Entrer le code d’accès
       </button>
     </div>
   </div>
 </div>
 <section className='py-16 px-6 md:px-20 pt-30 bg-white'>
+  
   <h2 className="text-3xl font-bold pb-10 text-gray-800">
         Nos  <span className="text-teal-500">Fonctionnalités.</span></h2>
         <p className='text-center text-gray-500 mb-16'>Cette fonctionnalité exceptionnelle peut rendre les activités d’apprentissage plus efficaces."</p>
@@ -195,6 +199,7 @@ export default function Features() {
     </div>
   </div>
 </div>
+
  <div className="mb-20 flex flex-col md:flex-row items-center gap-20">
   
   <div className="md:w-1/2 relative">
@@ -215,8 +220,8 @@ export default function Features() {
   </div>
 
   
-  <div className="md:w-1/2 pt-20">
-  <div className='pb-20'>
+  <div className="md:w-1/2 pt-20 ">
+  <div className='pb-20 '>
     <h2 className="text-3xl font-bold text-gray-800 pr-30">
         Évaluations, <span className="text-teal-500"> Quiz </span><h2 className="text-3xl font-bold text-gray-800">, Tests.</h2></h2>
         </div>
@@ -230,40 +235,110 @@ Les résultats des étudiants sont automatiquement enregistrés dans le carnet d
   </div>
   
 </div>
- <div className="mb-20 flex flex-col md:flex-row-reverse items-center gap-20">
-  
-  <div className="md:w-1/2 relative">
-  {/* Image */}
-  <img
-    src={meet}
-    alt="Feature"
-    className="w-[500px] h-[375px] pr-[50px] rounded-xl pb-2 relative z-10"
-  />
-
-  {/* Floating Bubbles */}
-  <span className="absolute w-4 h-4 bg-blue-400 rounded-full top-50 left-1/2 animate-float delay-0"></span>
-  <span className="absolute w-4 h-4 bg-green-700 rounded-full top-20 left-1/2 animate-float delay-0"></span>
-  <span className="absolute w-3 h-3 bg-pink-400 rounded-full top-1/3 right-20 animate-float delay-200"></span>
-  <span className="absolute w-4 h-4 bg-red-300 rounded-full bottom-70 right-10 animate-float delay-100"></span>
-  <span className="absolute w-2.5 h-2.5 bg-indigo-300 rounded-full top-10 right-[30%] animate-float delay-500"></span>
-  <span className="absolute w-4 h-4 bg-red-300 rounded-full bottom-70 left-40 animate-float delay-100"></span>
-  </div>
-
-  
-  <div className="md:w-1/2 pt-20">
-  <div className='pb-20 text-justify break-words'>
-    <h2 className="text-3xl font-bold text-gray-800 pr-30">
-        Discussions <span className="text-teal-500">  en tête-à-tête </span>.<h2 className="text-3xl font-bold text-gray-800"> </h2></h2>
+{!showAll && (
+        <div className="text-center  mb-10 pt-10">
+          <button
+            onClick={() => setShowAll(true)}
+            className="text-teal-600 border border-teal-300 rounded-3xl h-10 w-50 hover:bg-teal-100 cursor-pointer font-semibold hover:underline"
+          >
+            Explore More
+          </button>
         </div>
-   <div className="space-y-6">
-      
-          <p className="text-gray-700 text-justify break-words  leading-relaxed max-w-md pr-10 pb-20">Les enseignants et les assistants pédagogiques peuvent discuter en privé avec les étudiants sans quitter l’environnement Zoom.</p>
-      
-      
-    </div>
-  </div>
-  
+      )}
+
+      {showAll && (
+        <>
+          <div className="mb-20 flex flex-col md:flex-row-reverse items-center gap-20">
+            <div className="md:w-1/2 relative">
+              <img
+                src={meet}
+                alt="Feature"
+                className="w-[500px] h-[375px] pr-[50px] rounded-xl pb-2 relative z-10"
+              />
+              {/* Floating Bubbles */}
+              <span className="absolute w-4 h-4 bg-blue-400 rounded-full top-50 left-1/2 animate-float delay-0"></span>
+              <span className="absolute w-4 h-4 bg-green-700 rounded-full top-1 left-1/2 animate-float delay-0"></span>
+              <span className="absolute w-3 h-3 bg-pink-400 rounded-full top-1/3 right-20 animate-float delay-200"></span>
+              <span className="absolute w-4 h-4 bg-red-300 rounded-full bottom-70 right-10 animate-float delay-100"></span>
+              <span className="absolute w-2.5 h-2.5 bg-indigo-300 rounded-full top-10 right-[30%] animate-float delay-500"></span>
+              <span className="absolute w-4 h-4 bg-blue-300 rounded-full top-10 left-10 animate-float delay-100"></span>
+              <span className="absolute w-4 h-4 bg-red-500 rounded-full top-70 left-1 animate-float delay-100"></span>
+              <span className="absolute w-2.5 h-2.5 bg-indigo-300 rounded-full top-10 right-[30%] animate-float delay-500"></span>
+              <span className="absolute w-4 h-4 bg-red-300 rounded-full bottom-10 left-10 animate-float delay-100"></span>
+            </div>
+
+            <div className="md:w-1/2 pt-20">
+              <div className="pb-20 text-justify break-words">
+                <h2 className="text-3xl font-bold text-gray-800 pr-30">
+                  Discussions <span className="text-teal-500"> en tête-à-tête </span>.
+                </h2>
+              </div>
+              <div className="space-y-6">
+                <p className="text-gray-700 text-justify break-words leading-relaxed max-w-md pr-10 pb-20">
+                  Les enseignants et les assistants pédagogiques peuvent discuter en privé avec les étudiants sans quitter l’environnement Zoom.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-20 flex flex-col md:flex-row items-center gap-20">
+            <div className="md:w-1/2 relative">
+              <img
+                src={level}
+                alt="Feature"
+                className="w-[500px] h-[375px] pr-[50px] rounded-xl pb-2 relative z-10"
+              />
+              {/* Floating Bubbles + Icons */}
+              <span className="absolute w-4 h-4 bg-blue-400 rounded-full top-50 left-1/2 animate-float delay-0"></span>
+              <span className="absolute w-4 h-4 bg-green-700 rounded-full top-1 left-1/2 animate-float delay-0"></span>
+              <span className="absolute w-3 h-3 bg-pink-400 rounded-full top-1/3 right-20 animate-float delay-200"></span>
+              <span className="absolute w-4 h-4 bg-red-300 rounded-full bottom-70 right-10 animate-float delay-100"></span>
+              <span className="absolute w-2.5 h-2.5 bg-indigo-300 rounded-full top-10 right-[30%] animate-float delay-500"></span>
+              <span className="absolute w-4 h-4 bg-blue-300 rounded-full top-10 left-10 animate-float delay-100"></span>
+              <span className="absolute w-4 h-4 bg-red-500 rounded-full top-70 left-1 animate-float delay-100"></span>
+              <span className="absolute w-2.5 h-2.5 bg-indigo-300 rounded-full top-10 right-[30%] animate-float delay-500"></span>
+
+              <FaChalkboardTeacher className="absolute w-5 h-5 top-[20%] right-[-10px] animate-float delay-200 text-green-600" />
+              <FaBookOpen className="absolute w-7 h-7 bottom-[-10px] left-[25%] animate-float delay-400 text-red-600" />
+              <FaUsers className="absolute w-4 h-4 bottom-[25%] right-[150px] animate-float delay-600 text-pink-500" />
+              <FaUserGraduate className="absolute w-5 h-5 top-[80px] left-[150px] animate-float delay-300 text-yellow-500" />
+              <FaChalkboardTeacher className="absolute w-4 h-4 bottom-[80px] right-[80px] animate-float delay-100 text-red-400" />
+              <FaBookOpen className="absolute w-5 h-5 top-[40px] right-[90px] animate-float delay-500 text-indigo-500" />
+              <FaUsers className="absolute w-6 h-6 bottom-[70px] left-[80px] animate-float delay-700 text-teal-400" />
+              <FaUserGraduate className="absolute w-4 h-4 top-[50%] right-[175px] animate-float delay-[800ms] text-orange-400" />
+              <FaChalkboardTeacher className="absolute w-5 h-5 top-[20%] right-[-10px] animate-float delay-200 text-green-600" />
+              <FaBookOpen className="absolute w-7 h-7 bottom-[-10px] left-[25%] animate-float delay-400 text-purple-600" />
+              <FaUsers className="absolute w-4 h-4 bottom-[25%] left-[21px] animate-float delay-600 text-pink-500" />
+              <FaBookOpen className="absolute w-5 h-5 bottom-[5px] left-[90px] animate-float delay-500 text-indigo-500" />
+              <FaUsers className="absolute w-6 h-6 bottom-[10px] right-[200px] animate-float delay-700 text-teal-400" />
+            </div>
+
+            <div className="md:w-1/2 pt-20">
+              <div className="pb-20">
+                <h2 className="text-3xl font-bold text-gray-800 pr-40">
+                  Cours pour chaque <span className="text-teal-500">niveau d'éducation</span>.
+                </h2>
+              </div>
+              <div className="space-y-6">
+                <p className="text-gray-700 text-justify break-words leading-relaxed max-w-md pr-10 pb-20">
+                  Accédez à une large sélection de cours adaptés à tous les niveaux d'éducation, du fondamental au supérieur. Que vous soyez élève, étudiant ou en reconversion, trouvez les ressources qui répondent à vos besoins.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="text-center mt-6">
+  <button
+    onClick={() => setShowAll(false)}
+    className="text-teal-600 border border-teal-300 rounded-3xl h-10 w-50 hover:bg-teal-100 cursor-pointer font-semibold hover:underline"
+  >
+    Show Less
+  </button>
 </div>
+        </>
+        
+      )}
+   
+
 </section>
 
     </div>

@@ -16,7 +16,7 @@ export default function Header() {
         <div className="flex items-center justify-start min-h-screen px-10">
       <div className="max-w-md">
         <h1 className="text-4xl font-bold text-white leading-tight mb-4">
-          <span className="text-orange-500">Étudier</span>
+          <span className="text-orange-400">Étudier </span>
           en ligne est désormais
 beaucoup<br />
            plus facile
@@ -27,9 +27,9 @@ beaucoup<br />
 de manière plus interactive
         </p>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4"> 
           {/* Join Button */}
-          <button className="bg-white text-[#36B3BD] font-semibold px-6 py-3 rounded-full shadow-md hover:opacity-90 transition">
+          <button className="bg-white cursor-pointer hover:scale-110 text-[#36B3BD] font-semibold px-6 py-3 rounded-full shadow-md hover:opacity-90 transition">
             Rejoignez gratuitement
           </button>
 
@@ -40,12 +40,12 @@ de manière plus interactive
   rel="noopener noreferrer"
   className="flex items-center gap-2 cursor-pointer"
 >
-  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#36B3BD]" fill="currentColor" viewBox="0 0 24 24">
+  <div className="w-17 h-17 bg-white rounded-full hover:scale-110 flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6  w-6 text-[#36B3BD]" fill="currentColor" viewBox="0 0 24 24">
       <path d="M8 5v14l11-7z" />
     </svg>
   </div>
-  <span className="text-white text-opacity-90 font-medium">Découvrez comment ça marche</span>
+  <span className="text-white  text-opacity-90 font-medium">Découvrez comment ça marche</span>
 </a>
 
         </div>
