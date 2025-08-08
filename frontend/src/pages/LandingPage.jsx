@@ -53,10 +53,10 @@ export default function LandingPage() {
       </div>
       <Header />
       <Features />
-      <div className="flex justify-end pr-4 md:pr-20">
+      <div className="flex  md:justify-end pr-4 md:pr-20">
           <button 
             onClick={HandleExplore}
-            className="text-[#36B3BD] cursor-pointer hover:scale-101 hover:text-teal-600 text-base md:text-lg font-medium"
+            className="text-[#36B3BD] not-md:hidden cursor-pointer hover:scale-101 hover:text-teal-600 text-base md:text-lg font-medium"
           >
             Explorer les cours &rarr;
           </button>
@@ -77,6 +77,14 @@ export default function LandingPage() {
         <p className='font-bold text-xl md:text-2xl ml-2'>Cours 3 éme année </p>
       </div>
      <ExploreCourses courses={row2} />
+     <div className="flex  not-md:justify-end pr-4 md:pr-20">
+          <button 
+            onClick={HandleExplore}
+            className="text-[#36B3BD] md:hidden cursor-pointer hover:scale-101 hover:text-teal-600 text-base md:text-lg font-medium"
+          >
+            Explorer les cours &rarr;
+          </button>
+      </div>
       <LatestCourses />
       <Footer />
     </div>

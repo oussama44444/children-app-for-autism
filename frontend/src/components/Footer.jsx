@@ -20,19 +20,20 @@ function Footer() {
         
         <div className="mb-6 pt-10 text-center">
           <p className="mb-3 text-gray-300 font-medium">Subscribe to get our Newsletter</p>
-          <form className="flex items-center space-x-2">
-            <input
-              type="email"
-              placeholder="Your Email"
-              className="rounded-full w-70 px-4 py-2 bg-[#1B1F38] border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-            />
-            <button
-              type="submit"
-              className="bg-cyan-400 text-[#1B1F38] px-5  py-2 rounded-full font-semibold hover:bg-cyan-300 transition"
-            >
-              Subscribe
-            </button>
-          </form>
+         <form className="flex flex-col sm:flex-row items-center sm:space-x-2 space-y-2 sm:space-y-0">
+  <input
+    type="email"
+    placeholder="Your Email"
+    className="rounded-full w-70 px-4 py-2 bg-[#1B1F38] border border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+  />
+  <button
+    type="submit"
+    className="bg-cyan-400 text-[#1B1F38] px-5 py-2 rounded-full w-30 font-semibold hover:bg-cyan-300 transition"
+  >
+    Subscribe
+  </button>
+</form>
+
         </div>
 
         {/* Links */}

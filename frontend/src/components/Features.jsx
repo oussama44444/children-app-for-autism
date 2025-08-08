@@ -14,17 +14,17 @@ import level from '../assets/upscalemedia-transformed (3).png'
 import { useState } from 'react';
 const classfeatures = [
     {
-      icon: <LayoutGrid className="text-indigo-600 w-5 h-5" />,
+      icon: <LayoutGrid className="text-indigo-600 not-lg:hidden w-5 h-5" />,
       text: 'Les enseignants ne se perdent pas dans la vue en grille et disposent d’un espace Podium dédié.',
       bgColor: 'bg-indigo-100',
     },
     {
-      icon: <MonitorSmartphone className="text-orange-500 w-5 h-5" />,
+      icon: <MonitorSmartphone className="text-orange-500 not-lg:hidden w-5 h-5" />,
       text: 'Les assistants et les présentateurs peuvent être placés à l’avant de la classe.',
       bgColor: 'bg-orange-100',
     },
     {
-      icon: <Users2 className="text-purple-600 w-5 h-5" />,
+      icon: <Users2 className="text-purple-600 w-5 not-lg:hidden h-5" />,
       text: 'Les enseignants peuvent facilement voir tous les eleves et les données de la classe en un seul coup d’œil.',
       bgColor: 'bg-purple-100',
     },
@@ -69,7 +69,7 @@ export default function Features() {
               {feature.icon}
             </div>
             <h3 className="mt-10 text-lg font-semibold text-gray-800">{feature.title}</h3>
-            <p className="mt-2 text-sm text-gray-600">{feature.description}</p>
+            <p className="mt-2 text-sm not-lg:hidden text-gray-600">{feature.description}</p>
           </div>
         ))}
       </div>
@@ -83,7 +83,7 @@ export default function Features() {
       </div>
      <div className="mt-12 grid md:grid-cols-2 gap-4">
   {/* Instructor Card */}
-  <div className="relative w-full h-[400px] rounded-xl overflow-hidden shadow-md bg-white">
+  <div className="relative md:w-full md:h-[400px] h-50 rounded-xl overflow-hidden shadow-md bg-white">
     <img
       src={teacher}
       alt="instructor"
@@ -98,7 +98,7 @@ export default function Features() {
   </div>
 
   {/* Student Card */}
-  <div className="relative w-full h-[400px] rounded-xl overflow-hidden shadow-md bg-white">
+  <div className="relative md:w-full md:h-[400px] h-50 rounded-xl overflow-hidden shadow-md bg-white">
     <img
       src={student}
       alt="student"
@@ -124,26 +124,26 @@ export default function Features() {
       </div>
 
       {/* Feature 1: Interface Utilisateur */}
-      <div className="mb-12 md:mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-20">
+      <div className="mb-12 not-lg:hidden md:mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-20">
         <div className="w-full md:w-1/2 order-1 md:order-1">
-          <img src={call} alt="Interface utilisateur" className="w-full h-110 max-w-md mx-auto rounded-xl" />
+          <img src={call} alt="Interface utilisateur" className="w-full lg:h-90  md:h-110 max-w-md mx-auto rounded-xl" />
         </div>
         <div className="w-full md:w-1/2 pt-8 md:pt-20 order-2 md:order-2">
-          <div className='pb-8 md:pb-20 text-center md:text-left '>
+          <div className='pb-8 lg:pl-10 lg:pb-20 text-center lg:text-left '>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
               Une <span className="text-teal-500">interface utilisateur </span>
             </h2>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+            <h2 className="text-2xl md:text-3xl font-bold  text-gray-800">
               conçue pour la salle de classe.
             </h2>
           </div>
-          <div className="space-y-6 md:pr-30">
+          <div className="space-y-6 lg:pr-30">
             {classfeatures.map((feature, index) => (
               <div key={index} className="flex items-start gap-4 mx-auto max-w-md">
-                <div className={`rounded-full p-2 ${feature.bgColor}`}>
+                <div className={`rounded-full p-2  ${feature.bgColor}`}>
                   {feature.icon}
                 </div>
-                <p className="text-gray-700 text-center md:text-left leading-relaxed">{feature.text}</p>
+                <p className="text-gray-700 text-center lg:text-left leading-relaxed">{feature.text}</p>
               </div>
             ))}
           </div>
@@ -156,7 +156,7 @@ export default function Features() {
           <img
             src={featimg}
             alt="Outils pour enseignants"
-            className="w-full max-w-md mx-auto h-auto md:w-[500px] md:h-[675px] md:pr-[50px] rounded-xl pb-4 md:pb-20 relative z-10"
+            className="w-full  h-auto md:w-[700px] md:h-[375px] lg:h-[775px] lg:pr-[50px] rounded-xl pb-4 lg:pb-20 relative z-10"
           />
           
           {/* Floating Bubbles - Visible on all screens but positioned differently */}
@@ -190,7 +190,7 @@ export default function Features() {
         </div>
 
         <div className="w-full md:w-1/2 pt-8 md:pt-20 order-2 md:order-2">
-          <div className='pb-8 md:pb-20 text-center md:text-left md:pl-40'>
+          <div className='pb-8 md:pb-20 text-center lg:text-left lg:pl-40'>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
               <span className="text-teal-500">Outils pour </span>
             </h2>
@@ -198,7 +198,7 @@ export default function Features() {
               enseignants et apprenants.
             </h2>
           </div>
-          <div className="space-y-6 px-4 md:pl-40 md:pr-0">
+          <div className="space-y-6 px-4 lg:pl-40 md:pr-0">
             <p className="text-gray-700 text-center md:text-justify leading-relaxed max-w-md mx-auto md:mx-0">
               Class dispose d'un ensemble dynamique d'outils pédagogiques conçus pour être utilisés en temps réel pendant les cours. Les enseignants peuvent distribuer des devoirs en direct que les élèves complètent et soumettent immédiatement.
             </p>
@@ -212,7 +212,7 @@ export default function Features() {
           <img
             src={quizz}
             alt="Évaluations"
-            className="w-full max-w-md mx-auto h-auto md:w-[500px] md:h-[375px] md:pr-[50px] rounded-xl pb-4 md:pb-2 relative z-10"
+            className="w-50 max-w-md mx-auto h-auto lg:w-[500px] lg:h-[375px] md:w-[400px] md:h-[175px] md:pr-[50px] rounded-xl pb-4 md:pb-2 relative z-10"
           />
           {/* Floating Bubbles */}
           <span className="absolute w-3 h-3 md:w-4 md:h-4 bg-blue-400 rounded-full top-1/2 md:top-50 left-1/2 animate-float delay-0"></span>
@@ -229,7 +229,7 @@ export default function Features() {
         </div>
 
         <div className="w-full md:w-1/2 pt-8 md:pt-20 order-2 md:order-2">
-          <div className='pb-8 md:pb-20 text-center md:text-left'>
+          <div className='pb-8 lg:pb-20 text-center lg:text-left'>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
               Évaluations, <span className="text-teal-500"> Quiz </span>
             </h2>
@@ -277,13 +277,13 @@ export default function Features() {
               <span className="absolute w-2 h-2 md:w-2.5 md:h-2.5 bg-indigo-300 rounded-full top-1/6 md:top-10 right-1/4 md:right-[30%] animate-float delay-500"></span>
               <span className="absolute w-3 h-3 md:w-4 md:h-4 bg-red-300 rounded-full bottom-1/6 md:bottom-10 left-1/6 md:left-10 animate-float delay-100"></span>
             </div>   <div className="w-full md:w-1/2 pt-8 md:pt-20 order-2 md:order-2">
-              <div className="pb-8 md:pb-20 text-center md:text-left md:pl-40">
+              <div className="pb-8 lg:pb-20 text-center lg:text-left lg:pl-40">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                   Discussions <span className="text-teal-500">en tête-à-tête</span>.
                 </h2>
               </div>
               <div className="space-y-6 px-4  md:px-0">
-                <p className="text-gray-700 md:pl-40 text-center md:text-justify leading-relaxed max-w-md mx-auto md:mx-0">
+                <p className="text-gray-700 lg:pl-40 text-center md:text-justify leading-relaxed max-w-md mx-auto md:mx-0">
                   Les enseignants et les assistants pédagogiques peuvent discuter en privé avec les étudiants sans quitter l'environnement Zoom.
                 </p>
               </div>
@@ -296,7 +296,7 @@ export default function Features() {
               <img
                 src={level}
                 alt="Niveaux d'éducation"
-                className="w-full max-w-md mx-auto h-auto md:w-[500px] md:h-[375px] md:pr-[50px] rounded-xl pb-4 md:pb-2 relative z-10"
+                className="w-full max-w-md mx-auto h-auto lg:w-[500px]  lg:h-[375px] md:w-[400px] md:h-[275px] md:pr-[90px] rounded-xl pb-4 md:pb-2 relative z-10"
               />
               
               {/* Floating Bubbles */}
@@ -326,7 +326,7 @@ export default function Features() {
             </div>
 
             <div className="w-full md:w-1/2 pt-8 md:pt-20 order-2 md:order-2">
-              <div className="pb-8 md:pb-20 text-center md:text-left">
+              <div className="pb-8 lg:pb-20 text-center lg:text-left">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                   Cours pour chaque <span className="text-teal-500">niveau d'éducation</span>.
                 </h2>

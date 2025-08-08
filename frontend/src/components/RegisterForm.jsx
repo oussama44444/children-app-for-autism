@@ -36,39 +36,44 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        <div>
-        <p className="flex flex-start font-medium text-center mb-4">Adresse e-mail</p>
-      <input
-        type="email"
-        placeholder="Entrez votre adresse e-mail"
-        className="w-full p-4 border border-teal-200 rounded-full text-base focus:outline-none focus:border-teal-400"
-        value={credentials.emailadress}
-        onChange={(e) => setCredentials({ ...credentials, emailadress: e.target.value })}
-      /></div>
-        <div>
-        <p className="flex flex-start font-medium text-center mb-4">Nom d'utilisateur</p>
-      <input
-        type="text"
-        placeholder="Entrez votre nom d'utilisateur"
-        className="w-full p-4 border border-teal-200 rounded-full text-base focus:outline-none focus:border-teal-400"
-        value={credentials.username}
-        onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-      /></div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-6">
+      {error && <p className="text-red-500 text-xs sm:text-sm text-center">{error}</p>}
+      
+      <div>
+        <p className="text-sm sm:text-base font-medium mb-2 sm:mb-4">Adresse e-mail</p>
+        <input
+          type="email"
+          placeholder="Entrez votre adresse e-mail"
+          className="w-full p-3 sm:p-4 border border-teal-200 rounded-full text-sm sm:text-base focus:outline-none focus:border-teal-400"
+          value={credentials.emailadress}
+          onChange={(e) => setCredentials({ ...credentials, emailadress: e.target.value })}
+        />
+      </div>
+
+      <div>
+        <p className="text-sm sm:text-base font-medium mb-2 sm:mb-4">Nom d'utilisateur</p>
+        <input
+          type="text"
+          placeholder="Entrez votre nom d'utilisateur"
+          className="w-full p-3 sm:p-4 border border-teal-200 rounded-full text-sm sm:text-base focus:outline-none focus:border-teal-400"
+          value={credentials.username}
+          onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+        />
+      </div>
+
       <div className="relative">
-        <p className='flex flex-start font-medium text-center mb-4'>Mot de passe</p>
+        <p className="text-sm sm:text-base font-medium mb-2 sm:mb-4">Mot de passe</p>
         <input
           type={showPassword ? "text" : "password"}
           placeholder="Entrez votre mot de passe"
-          className="w-full p-4 border border-teal-200 rounded-full  text-base pr-10 focus:outline-none focus:border-teal-400"
+          className="w-full p-3 sm:p-4 border border-teal-200 rounded-full text-sm sm:text-base pr-10 focus:outline-none focus:border-teal-400"
           value={credentials.password}
           onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
         />
         <button
           type="button"
           onClick={togglePasswordVisibility}
-          className="absolute right-4 top-14 text-gray-400 cursor-pointer"
+          className="absolute right-3 sm:right-4 top-10 md:top-14  sm:top-[42px] text-gray-400 cursor-pointer"
         >
           {showPassword ? (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -83,11 +88,9 @@ const RegisterForm = () => {
         </button>
       </div>
 
-     
-
       <button
         type="submit"
-        className="bg-teal-400 text-white p-4 rounded-full hover:bg-teal-500 transition-colors w-full font-medium text-lg mt-2"
+        className="bg-teal-400 text-white p-3 sm:p-4 rounded-full hover:bg-teal-500 transition-colors w-full font-medium text-sm sm:text-lg mt-2"
       >
         Inscription
       </button>

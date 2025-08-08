@@ -51,7 +51,7 @@ const LoginForm = () => {
         <button
           type="button"
           onClick={togglePasswordVisibility}
-          className="absolute right-4 top-14 text-gray-400 cursor-pointer"
+          className="absolute right-4 top-11 md:top-14 text-gray-400 cursor-pointer"
         >
           {showPassword ? (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

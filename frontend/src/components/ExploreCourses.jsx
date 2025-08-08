@@ -2,8 +2,9 @@ import React, { useRef, useState} from 'react';
 
 const ExploreCourses = ({ courses }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null);
   const scrollRef = useRef(null);
-   const [expandedText, setExpandedText] = useState({});
+  const [expandedText, setExpandedText] = useState({});
 
   const toggleText = (index) => {
     setExpandedText(prev => ({
@@ -12,27 +13,32 @@ const ExploreCourses = ({ courses }) => {
     }));
   };
 
- 
-
- 
+  const handleInteraction = (index) => {
+    if (window.innerWidth >= 1024) { // lg breakpoint
+      setHoveredIndex(index);
+    } else {
+      setClickedIndex(clickedIndex === index ? null : index);
+    }
+  };
 
   return (
     <div className="relative bg-gray-200">
       <div ref={scrollRef} className="flex items-center px-4 md:px-20 gap-2 md:gap-4 overflow-x-auto scrollbar-hide py-4 md:py-6">
         {courses.map((course, index) => {
-          const isHovered = hoveredIndex === index;
+          const isActive = window.innerWidth >= 1024 ? hoveredIndex === index : clickedIndex === index;
           const isExpanded = expandedText[index];
 
           return (
             <div
               key={course.id}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className={`transition-all duration-300 relative flex-shrink-0 ${
-                isHovered ? 'z-20 scale-100' : 'scale-90 z-10'
+              onClick={() => handleInteraction(index)}
+              onMouseEnter={() => window.innerWidth >= 1024 && setHoveredIndex(index)}
+              onMouseLeave={() => window.innerWidth >= 1024 && setHoveredIndex(null)}
+              className={`transition-all duration-300 relative flex-shrink-0 cursor-pointer ${
+                isActive ? 'z-20 scale-100' : 'scale-90 z-10'
               }`}
             >
-              {isHovered ? (
+              {isActive ? (
                 <div className="w-48 md:w-64 h-72 md:h-80 rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 bg-white flex flex-col">
                   <img
                     src={course.image}
