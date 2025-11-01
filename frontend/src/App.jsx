@@ -1,21 +1,25 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LanguageProvider } from "./context/LanguageContext";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+import WelcomeScreen from "./components/WelcomeScreen";
+import StorySelection from "./components/StorySelection";
+import StoryPlayer from "./components/StoryPlayer";
+import './index.css';
 
-import LandingPage from './pages/LandingPage';
-import NavBar from './components/NavBar';
 function App() {
   return (
-    <BrowserRouter>
-
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/land" element={<LandingPage />} />
-        <Route path="/" element={<Navigate to="/land" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="app">
+      <LanguageProvider>
+        <BrowserRouter>
+          <LanguageSwitcher />
+          <Routes>
+            <Route path="/" element={<WelcomeScreen />} />
+            <Route path="/stories" element={<StorySelection />} />
+            <Route path="/story/:id" element={<StoryPlayer />} />
+          </Routes>
+        </BrowserRouter>
+      </LanguageProvider>
+    </div>
   );
 }
 

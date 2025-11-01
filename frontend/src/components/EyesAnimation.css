@@ -1,0 +1,72 @@
+.eyes-container {
+  position: fixed;
+  top: 25vh;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15vw;
+  margin: 0;
+  z-index: 100;
+}
+
+.eye {
+  width: 15vw;
+  height: 15vw;
+  max-width: 200px;
+  max-height: 200px;
+  min-width: 100px;
+  min-height: 100px;
+  background: white;
+  border-radius: 50%;
+  border: 8px solid #333;
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.pupil {
+  width: 35%;
+  height: 35%;
+  background: #333;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.eye.left .pupil {
+  transform: translate(-80%, -50%);
+}
+
+.eye.right .pupil {
+  transform: translate(-20%, -50%);
+}
+
+.eye.wide {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.eye.closed {
+  height: 10px;
+  border-radius: 20px;
+  background: #333;
+  border: none;
+  transform-origin: center;
+}
+
+.eye.closed .pupil {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .eyes-container {
+    gap: 10vw;
+  }
+  
+  .eye {
+    width: 25vw;
+    height: 25vw;
+  }
+}

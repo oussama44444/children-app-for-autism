@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "title": "The Friendly Cat",
+    "image": "/assets/images/cat.jpg",
+    "stages": [
+      {
+        "segments": [
+          {
+            "audio": "/assets/audios/Le vent et le soleil - 01 .mp3",
+            "question": {
+              "question": "What color am I?",
+              "answers": [
+                { "text": "Black", "correct": false },
+                { "text": "White", "correct": true },
+                { "text": "Orange", "correct": false }
+              ],
+              "hint": "Look at my name!"
+            }
+          },
+          {
+            "audio": "/assets/audios/Le vent et le soleil - 02 .mp3",
+            "question": {
+              "question": "What's my favorite food?",
+              "answers": [
+                { "text": "Fish", "correct": true },
+                { "text": "Cookies", "correct": false },
+                { "text": "Pizza", "correct": false }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
