@@ -1,13 +1,13 @@
 const express = require("express");
-const spaceAuth = require('../middlewares/spaceAuth');
 require("dotenv").config();
 
 const router = express.Router();
 
 const userController = require("../controllers/user");
 const authenticateToken = require("../middlewares/auth");
+const adminAuth = require("../middlewares/adminAuth");
 
-router.get("/",spaceAuth(["manage_users"]),userController.getAll)
+router.get("/",adminAuth,userController.getAll)
 router.post("/login", userController.login);
 
 router.post("/register", userController.register);
@@ -18,7 +18,6 @@ router.get("/:userId/reviews", userController.getReviews);
 router.post("/forget-password", userController.forgetPassword);
 
 router.post("/reset-password", userController.resetPassword);
-router.post("/reports", userController.sendReport);
 
 // Push notification token routes
 router.post("/push-token", authenticateToken, userController.registerPushToken);
