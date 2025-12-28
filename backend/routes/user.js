@@ -7,7 +7,7 @@ const userController = require("../controllers/user");
 const authenticateToken = require("../middlewares/auth");
 const adminAuth = require("../middlewares/adminAuth");
 
-router.get("/",adminAuth,userController.getAll)
+router.get("/", adminAuth, userController.getAll)
 router.post("/login", userController.login);
 
 router.post("/register", userController.register);
