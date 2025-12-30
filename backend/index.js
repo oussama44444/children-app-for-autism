@@ -3,6 +3,9 @@ const connectDB = require("./config/connect");
 const express = require("express");
 const cors = require("cors");
 const storiesRoute = require("./routes/stories");
+const userRoute = require("./routes/user");
+const profileRoute = require("./routes/profile");
+const adminRoute = require("./routes/admin");
 const os = require("os");
 
 const app = express();
@@ -23,7 +26,9 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/stories", storiesRoute);
-
+app.use("/user", userRoute);
+app.use("/profile", profileRoute);
+app.use("/admin", adminRoute);
 // Default route
 app.get("/", (req, res) => {
   res.send("🚀 Autism Stories Backend is Running!");

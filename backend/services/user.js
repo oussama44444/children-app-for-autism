@@ -66,9 +66,7 @@ exports.login = async (req, res) => {
       console.error("JWT secret is not defined in the environment variables");
       return res.status(500).json({ error: "Server configuration error" });
     }
-    const role = user.spaceAccess && user.spaceAccess.length > 0
-    ? user.spaceAccess
-    : user.role;
+    const role = user.role;
     const payload = {
       userId: user._id,
       email: user.email,
@@ -93,6 +91,7 @@ exports.login = async (req, res) => {
         hand:user.hand,
         image:user.image
       },
+      success: true
     });
   } catch (error) {
     console.error("Error during login:", error.message);
@@ -102,7 +101,7 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    const { email, firstName, lastName, phone, password, address } = req;
+    const { email, firstName, lastName, password} = req;
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ error: "Missing required fields" });
     }
@@ -124,10 +123,8 @@ exports.register = async (req, res) => {
     const newUser = new userModel({
       firstName,
       lastName,
-      phone: phone,
       email,
       password: hashedPassword,
-      address: address,
     });
 
     // newUser.verified = false;
@@ -144,42 +141,6 @@ exports.register = async (req, res) => {
     });
 
     await vtoken.save();
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.GMAIL_USER,
-      to: email,
-      subject: "Sarbini Account Verification",
-      html: `
-       <body style="background-color: #f7e8e8; font-family: Arial, sans-serif; margin: 0; padding: 0;">
-       <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin-top: 50px;">
-         <tr>
-           <td align="center" style="background: #ffffff; border-radius: 8px; padding: 40px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-             <h2 style="color: #333333; font-size: 24px; margin-bottom: 24px;">Welcome to Sarbini</h2>
-             <p style="color: #555555; font-size: 16px; line-height: 1.5; margin-bottom: 32px;">
-               Please verify your account to get started.
-             </p>
-             <a href="${process.env.BASE_URL}/user/verify/${newUser._id}/${vtoken.token}" target="_blank" style="background-image: linear-gradient(to right, #f472b6, #fde68a); color: #ffffff; padding: 16px 32px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block;">
-               Verify Account
-             </a>
-             <p style="color: #999999; font-size: 12px; margin-top: 32px;">
-               If you did not request this email, no further action is required.
-             </p>
-           </td>
-         </tr>
-       </table>
-     </body>
-     `,
-    };
-
-    await transporter.sendMail(mailOptions);
 
     res.status(201).json({
       message: "User registered successfully. Verification email sent.",

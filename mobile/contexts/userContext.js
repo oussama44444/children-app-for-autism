@@ -11,7 +11,6 @@ export const UserProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
   const [user_token, setUserToken] = useState(null);
-  const [owner_token, setOwnerToken] = useState(null);
   const [loading, setLoading] = useState(true);
   // track whether the splash has been seen at least once (persisted, never removed on logout)
   const [hasSeenSplash, setHasSeenSplash] = useState(false);
@@ -21,7 +20,6 @@ export const UserProvider = ({ children }) => {
     const loadAuth = async () => {
       try {
         const storedUserToken = await AsyncStorage.getItem('padel_user_token');
-        const storedOwnerToken = await AsyncStorage.getItem('padel_owner_token');
 
         if (storedUserToken) {
           const storedUser = await AsyncStorage.getItem('padel_user_user');
@@ -29,16 +27,6 @@ export const UserProvider = ({ children }) => {
           setUserToken(storedUserToken);
           setUser(JSON.parse(storedUser));
           setRole('user');
-        }
-
-        if (storedOwnerToken) {
-          const storedOwner = await AsyncStorage.getItem('padel_owner_user');
-          setOwnerToken(storedOwnerToken);
-          if (!storedUserToken) {
-            setToken(storedOwnerToken);
-            setUser(JSON.parse(storedOwner));
-            setRole('owner');
-          }
         }
         // load persistent splash flag (if user has already seen it)
         const seen = await AsyncStorage.getItem('padel_seen_splash');
@@ -53,63 +41,6 @@ export const UserProvider = ({ children }) => {
     loadAuth();
   }, []);
 
-  // get All users
-  const getAllUsers = async (page = 1, limit = 10, search = '') => {
-    try {
-      if (!token) return { users: [], pagination: {} };
-      const data = await userService.getAllUsers(token, page, limit, search);
-      setUsers(data.data || []);
-      return {
-        users: data.data || [],
-        pagination: data.pagination || {}
-      };
-    } catch (err) {
-      console.error('Error fetching users:', err);
-      setUsers([]);
-      return { users: [], pagination: {} };
-    }
-  }
-
-
-  // 🔹 Login
-  const login = async (email, password) => {
-    try {
-      const data = await userService.login(email, password);
-      const userRole = data.user.role?.[0]?.role || data.user.role;
-
-      setToken(data.jwt);
-      setUser(data.user);
-      setRole(userRole);
-
-      if (userRole === 'owner') {
-        setOwnerToken(data.jwt);
-        await AsyncStorage.setItem('padel_owner_token', data.jwt);
-        await AsyncStorage.setItem('padel_owner_user', JSON.stringify(data.user));
-      } else {
-        setUserToken(data.jwt);
-        await AsyncStorage.setItem('padel_user_token', data.jwt);
-        await AsyncStorage.setItem('padel_user_user', JSON.stringify(data.user));
-      }
-
-      return { success: true, role: userRole, user: data.user };
-    } catch (err) {
-      console.error('Login error:', err);
-      const errorMessage = err.error || err.message || 'There is an error logging in';
-      return { success: false, error: errorMessage };
-    }
-  };
-
-  // 🔹 Signup
-  const signup = async (userData) => {
-    try {
-      const data = await userService.signup(userData);
-      console.log('Signup successful:', data);
-      return { success: true };
-    } catch (err) {
-      console.error('Signup error:', err);
-      return { success: false, error: 'There is an error creating your account' };
-    }
-  };
 
   // 🔹 Forget password (send reset email)
   const forgetPassword = async (email) => {
@@ -223,16 +154,12 @@ export const UserProvider = ({ children }) => {
         token,
         role,
         user_token,
-        owner_token,
         hasSeenSplash,
-        login,
-        signup,
         forgetPassword,
         markSplashSeen,
         logout,
         loading,
-        updateProfile, 
-        getAllUsers,
+        updateProfile,
         users
       }}
     >

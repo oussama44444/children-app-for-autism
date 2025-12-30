@@ -1,5 +1,4 @@
 const adminService = require("../services/admin");
-const coachService = require("../services/coach");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;

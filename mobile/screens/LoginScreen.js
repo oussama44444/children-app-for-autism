@@ -57,7 +57,7 @@ const LoginScreen = ({ navigation }) => {
       <LoginForm
         onSubmit={handleLogin}
         loading={loading}
-        error={error}
+        error={errorMessage || error}
         clearError={clearError}
         navigation={navigation}
         onValidationError={handleValidationError}

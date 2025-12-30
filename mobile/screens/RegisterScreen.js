@@ -11,7 +11,6 @@ const RegisterScreen = ({ navigation }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const pendingUserRef = useRef(null);
 
   useEffect(() => {
     const backAction = () => {
@@ -31,7 +30,7 @@ const RegisterScreen = ({ navigation }) => {
     const result = await register(userData, true); // true = delay navigation
 
     if (result.success) {
-      pendingUserRef.current = result.user;
+      // Do not auto-login after registration. Redirect user to Login to sign in.
       setShowSuccess(true);
     } else {
       setErrorMessage(result.error);
@@ -46,9 +45,8 @@ const RegisterScreen = ({ navigation }) => {
 
   const handleSuccessHide = () => {
     setShowSuccess(false);
-    if (pendingUserRef.current) {
-      completeLogin(pendingUserRef.current);
-    }
+    // After registering, always navigate to Login so the user can sign in
+    navigation.navigate('Login');
   };
 
   return (
@@ -56,7 +54,7 @@ const RegisterScreen = ({ navigation }) => {
       <RegisterForm
         onSubmit={handleRegister}
         loading={loading}
-        error={error}
+        error={errorMessage || error}
         clearError={clearError}
         navigation={navigation}
         onValidationError={handleValidationError}

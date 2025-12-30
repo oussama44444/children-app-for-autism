@@ -1,13 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as userService from '../services/userService';
 
 const AuthContext = createContext();
-
-// Hardcoded users for testing
-const HARDCODED_USERS = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', password: '123456' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', password: '123456' },
-];
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -24,7 +19,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const storedToken = await AsyncStorage.getItem('authToken');
       const storedUser = await AsyncStorage.getItem('user');
-      
       if (storedToken && storedUser) {
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
@@ -38,44 +32,34 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials, delayNavigation = false) => {
     setLoading(true);
     setError(null);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
     try {
-      // Check hardcoded users
-      const foundUser = HARDCODED_USERS.find(
-        u => u.email === credentials.email && u.password === credentials.password
-      );
+      const res = await userService.login(credentials);
+      const jwt = res.jwt || res.token || res.data?.token;
+      const resUser = res.user || res.data || null;
 
-      if (!foundUser) {
-        throw new Error('Invalid email or password');
+      if (!jwt || !resUser) {
+        const message = res.message || 'Invalid response from server';
+        throw new Error(message);
       }
 
-      // Generate fake token
-      const fakeToken = `fake-token-${Date.now()}`;
-      const userWithoutPassword = { 
-        id: foundUser.id, 
-        name: foundUser.name, 
-        email: foundUser.email 
-      };
+      await AsyncStorage.setItem('authToken', jwt);
+      await AsyncStorage.setItem('user', JSON.stringify(resUser));
 
-      await AsyncStorage.setItem('authToken', fakeToken);
-      await AsyncStorage.setItem('user', JSON.stringify(userWithoutPassword));
-      
-      // If delayNavigation is true, return user data but don't set state yet
       if (delayNavigation) {
-        setToken(fakeToken);
-        return { success: true, user: userWithoutPassword, token: fakeToken };
+        setToken(jwt);
+        return { success: true, user: resUser, token: jwt };
       }
-      
-      setToken(fakeToken);
-      setUser(userWithoutPassword);
+
+      setToken(jwt);
+      setUser(resUser);
       setIsAuthenticated(true);
-      
+
       return { success: true };
     } catch (err) {
-      const errorMessage = err.message || 'Login failed';
+      const status = err?.response?.status;
+      const respData = err?.response?.data;
+      console.error('[AuthContext.login] login failed', { credentials: { email: credentials.email }, status, respData, message: err.message });
+      const errorMessage = respData?.error || respData?.message || err.message || 'Login failed';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -91,46 +75,41 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData, delayNavigation = false) => {
     setLoading(true);
     setError(null);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
     try {
-      // Check if email already exists
-      const existingUser = HARDCODED_USERS.find(u => u.email === userData.email);
-      if (existingUser) {
-        throw new Error('Email already registered');
+      const res = await userService.register(userData);
+
+      // If backend does not return token/user on register, try to login immediately
+      if (res && (res.jwt || res.user)) {
+        const jwt = res.jwt || res.token;
+        const resUser = res.user || null;
+        if (jwt && resUser) {
+          await AsyncStorage.setItem('authToken', jwt);
+          await AsyncStorage.setItem('user', JSON.stringify(resUser));
+          if (!delayNavigation) {
+            setToken(jwt);
+            setUser(resUser);
+            setIsAuthenticated(true);
+          } else {
+            setToken(jwt);
+            return { success: true, user: resUser, token: jwt };
+          }
+          return { success: true };
+        }
       }
 
-      // Create new user
-      const newUser = {
-        id: HARDCODED_USERS.length + 1,
-        name: userData.name,
-        email: userData.email,
-      };
-
-      // Add to hardcoded users (for this session only)
-      HARDCODED_USERS.push({ ...newUser, password: userData.password });
-
-      // Generate fake token
-      const fakeToken = `fake-token-${Date.now()}`;
-
-      await AsyncStorage.setItem('authToken', fakeToken);
-      await AsyncStorage.setItem('user', JSON.stringify(newUser));
-      
-      // If delayNavigation is true, return user data but don't set state yet
-      if (delayNavigation) {
-        setToken(fakeToken);
-        return { success: true, user: newUser, token: fakeToken };
+      // Attempt to auto-login after registration using provided credentials
+      if (userData.email && userData.password) {
+        const loginResult = await login({ email: userData.email, password: userData.password }, delayNavigation);
+        if (loginResult.success) return loginResult; // propagate user/token when delayNavigation is used
       }
-      
-      setToken(fakeToken);
-      setUser(newUser);
-      setIsAuthenticated(true);
-      
-      return { success: true };
+
+      // If registration succeeded but auto-login wasn't possible
+      return { success: true, message: res.message || 'Registration successful' };
     } catch (err) {
-      const errorMessage = err.message || 'Registration failed';
+      const status = err?.response?.status;
+      const respData = err?.response?.data;
+      console.error('[AuthContext.register] register failed', { payload: { email: userData.email }, status, respData, message: err.message });
+      const errorMessage = respData?.error || respData?.message || err.message || 'Registration failed';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -142,7 +121,6 @@ export const AuthProvider = ({ children }) => {
     try {
       await AsyncStorage.removeItem('authToken');
       await AsyncStorage.removeItem('user');
-      
       setToken(null);
       setUser(null);
       setIsAuthenticated(false);

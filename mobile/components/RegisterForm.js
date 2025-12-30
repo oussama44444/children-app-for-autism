@@ -13,7 +13,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onValidationError }) => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -45,7 +46,7 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
   const handleRegister = () => {
     Keyboard.dismiss();
 
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
       if (onValidationError) {
         onValidationError('Veuillez remplir tous les champs');
       }
@@ -67,7 +68,8 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
     }
 
     onSubmit({
-      name: formData.name,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
       email: formData.email,
       password: formData.password,
     });
@@ -100,8 +102,18 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
           style={styles.input}
           placeholder="Entre ton nom complet..."
           placeholderTextColor="#B8B8D1"
-          value={formData.name}
-          onChangeText={(text) => updateField('name', text)}
+          value={formData.firstName}
+          onChangeText={(text) => updateField('firstName', text)}
+          autoCapitalize="words"
+        />
+
+        <Text style={styles.label}>Ton Prénom</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Entre ton prénom complet..."
+          placeholderTextColor="#B8B8D1"
+          value={formData.lastName}
+          onChangeText={(text) => updateField('lastName', text)}
           autoCapitalize="words"
         />
 

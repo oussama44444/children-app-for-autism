@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://192.168.1.6:5000';
 const api = axios.create({ baseURL: `${BACKEND_URL}/user` });
 
 const authHeader = (token) => (token ? { Authorization: `Bearer ${token}` } : {});
@@ -31,13 +31,35 @@ export const updateUserProfile = async (formData, token) => {
 
 
 export const login = async (credentials) => {
-	const res = await api.post('/login', credentials);
-	return res.data;
+	try {
+		const res = await api.post('/login', credentials);
+		return res.data;
+	} catch (err) {
+		console.error('[userService.login] request failed', {
+			url: api.defaults.baseURL + '/login',
+			payload: credentials,
+			status: err.response?.status,
+			responseData: err.response?.data,
+			message: err.message,
+		});
+		throw err;
+	}
 };
 
 export const register = async (data) => {
-	const res = await api.post('/register', data);
-	return res.data;
+	try {
+		const res = await api.post('/register', data);
+		return res.data;
+	} catch (err) {
+		console.error('[userService.register] request failed', {
+			url: api.defaults.baseURL + '/register',
+			payload: data,
+			status: err.response?.status,
+			responseData: err.response?.data,
+			message: err.message,
+		});
+		throw err;
+	}
 };
 
 export const forgetPassword = async (payload) => {

@@ -16,7 +16,7 @@ router.get("/verify/:id/:token", profileController.verifyemail);
 router.post("/forget-password", profileController.forgetPassword);
 router.post("/reset-password", profileController.resetPassword);
 
-router.put("/updateuser", authenticate, upload.single('image'),profileController.updateuser);
+router.put("/updateuser", authenticate,profileController.updateuser);
 
 router.delete("/deleteaccount", profileController.deleteaccount);
 
