@@ -46,8 +46,9 @@ export const StoriesProvider = ({ children }) => {
             description: s.description || '',
             category: s.category || s.genre || '',
             points: s.points || 0,
-            isPremium: s.isPremium || false,
-            completed: s.completed || false,
+            isPremium: !!s.isPremium,
+            completed: !!s.completed,
+            createdAt: s.createdAt || s._id?._timestamp || null,
             // include raw for debugging if needed
             _raw: s,
           };

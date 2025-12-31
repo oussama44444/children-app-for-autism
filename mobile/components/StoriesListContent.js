@@ -44,16 +44,27 @@ const StoriesListContent = () => {
     navigation.navigate('Subscription');
   };
 
+  const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
   const filteredStories = stories.filter(story => {
     if (filter === 'all') return true;
-    if (filter === 'new') return story.progress === 0 && !story.completed;
-    if (filter === 'premium') return story.isPremium;
+    if (filter === 'new') {
+      if (!story.createdAt) return false;
+      const created = new Date(story.createdAt).getTime();
+      return (now - created) <= thirtyDaysMs;
+    }
+    if (filter === 'premium') return !!story.isPremium;
     if (filter === 'free') return !story.isPremium;
     return true;
   });
 
-  const premiumStoriesCount = stories.filter(s => s.isPremium).length;
+  const premiumStoriesCount = stories.filter(s => !!s.isPremium).length;
   const freeStoriesCount = stories.filter(s => !s.isPremium).length;
+  const newStoriesCount = stories.filter(s => {
+    if (!s.createdAt) return false;
+    const created = new Date(s.createdAt).getTime();
+    return (now - created) <= thirtyDaysMs;
+  }).length;
 
   return (
     <View style={styles.container}>
@@ -98,6 +109,9 @@ const StoriesListContent = () => {
             <Text style={[styles.filterText, filter === 'new' && styles.filterTextActive]}>
               {t.stories.new}
             </Text>
+            <View style={styles.filterBadge}>
+              <Text style={styles.filterBadgeText}>{newStoriesCount}</Text>
+            </View>
           </TouchableOpacity>
 
           <TouchableOpacity
