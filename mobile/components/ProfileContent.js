@@ -9,23 +9,42 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../contexts/AuthContext';
+import { useSubscription } from '../contexts/SubscriptionContext';
+import { useNavigation } from '@react-navigation/native';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 
 const ProfileContent = ({ onLogout }) => {
   const { user } = useAuth();
-
-  
+  const { isSubscribed, subscription } = useSubscription();
+  const navigation = useNavigation();
+  const { language } = useLanguage();
+  const t = getTranslation(language);
 
   const menuItems = [
-    { label: 'Modifier le Profil', emoji: '✏️', action: 'edit' },
-    { label: 'Préférences', emoji: '⚙️', action: 'preferences' },
-    { label: 'Mes Badges', emoji: '🎖️', action: 'badges' },
-    { label: 'Historique', emoji: '📖', action: 'history' },
-    { label: 'Aide', emoji: '❓', action: 'help' },
+    { label: t.profile.menu.editProfile, emoji: '✏️', action: 'edit' },
+    { label: t.profile.menu.subscription, emoji: '👑', action: 'subscription', isPremium: true },
+    { label: t.profile.menu.preferences, emoji: '⚙️', action: 'preferences' },
+    { label: t.profile.menu.help, emoji: '❓', action: 'help' },
   ];
 
   const handleMenuPress = (action) => {
-    // TODO: Implement navigation to each section
-    console.log('Menu pressed:', action);
+    if (action === 'subscription') {
+      if (isSubscribed) {
+        navigation.navigate('SubscriptionDetails');
+      } else {
+        navigation.navigate('Subscription');
+      }
+    } else if (action === 'edit') {
+      navigation.navigate('EditProfile');
+    } else if (action === 'help') {
+      navigation.navigate('Help');
+    } else if (action === 'preferences') {
+      navigation.navigate('Settings');
+    } else {
+      // TODO: Implement navigation to each section
+      console.log('Menu pressed:', action);
+    }
   };
 
   return (
@@ -60,7 +79,7 @@ const ProfileContent = ({ onLogout }) => {
             <Text style={styles.userName}>{user?.name || 'Petit Explorateur'}</Text>
             <Text style={styles.userEmail}>{user?.email || 'explorer@sensaura.com'}</Text>
             <View style={styles.levelBadge}>
-              <Text style={styles.levelText}>⭐ Niveau 3 - Aventurier</Text>
+              <Text style={styles.levelText}>⭐ {t.profile.level} 3 - {t.profile.adventurer}</Text>
             </View>
           </View>
         </View>
@@ -70,7 +89,7 @@ const ProfileContent = ({ onLogout }) => {
 
       {/* Menu Section */}
       <View style={styles.menuContainer}>
-        <Text style={styles.menuTitle}>Mon Espace 🏠</Text>
+        <Text style={styles.menuTitle}>{t.profile.title} 🏠</Text>
         {menuItems.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -79,10 +98,18 @@ const ProfileContent = ({ onLogout }) => {
             activeOpacity={0.7}
           >
             <View style={styles.menuItemLeft}>
-              <View style={styles.menuEmojiContainer}>
+              <View style={[
+                styles.menuEmojiContainer,
+                item.isPremium && isSubscribed && styles.menuEmojiContainerPremium
+              ]}>
                 <Text style={styles.menuEmoji}>{item.emoji}</Text>
               </View>
-              <Text style={styles.menuLabel}>{item.label}</Text>
+              <View>
+                <Text style={styles.menuLabel}>{item.label}</Text>
+                {item.isPremium && isSubscribed && (
+                  <Text style={styles.activeSubscriptionText}>Actif</Text>
+                )}
+              </View>
             </View>
             <Text style={styles.menuArrow}>›</Text>
           </TouchableOpacity>
@@ -102,7 +129,7 @@ const ProfileContent = ({ onLogout }) => {
           style={styles.logoutGradient}
         >
           <Text style={styles.logoutEmoji}>👋</Text>
-          <Text style={styles.logoutText}>Se Déconnecter</Text>
+          <Text style={styles.logoutText}>{t.profile.menu.logout}</Text>
         </LinearGradient>
       </TouchableOpacity>
 
@@ -282,6 +309,15 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#9CA3AF',
     fontWeight: '300',
+  },
+  menuEmojiContainerPremium: {
+    backgroundColor: '#FEF3C7',
+  },
+  activeSubscriptionText: {
+    fontSize: 11,
+    color: '#10B981',
+    fontWeight: '700',
+    marginTop: 2,
   },
   logoutButton: {
     width: '100%',

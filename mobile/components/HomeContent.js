@@ -9,12 +9,16 @@ import {
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { useStories } from '../contexts/StoriesContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 import StoryCard from './StoryCard';
 import DashboardStats from './DashboardStats';
 
 const HomeContent = () => {
   const { user, logout } = useAuth();
   const { stories, completedStories, suggestedStories } = useStories();
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const [activeTab, setActiveTab] = useState('suggestions');
 
   const currentStreak = 3;
@@ -37,11 +41,11 @@ const HomeContent = () => {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <View style={styles.characterContainer}>
-            <Text style={styles.character}>🎭</Text>
+            <Text style={styles.character}>{user?.avatar || '🎭'}</Text>
           </View>
           <View style={styles.greetingContainer}>
-            <Text style={styles.greeting}>Bonjour {user?.name?.split(' ')[0]} ! 👋</Text>
-            <Text style={styles.subGreeting}>Prêt à explorer plus d'histoires incroyables aujourd'hui ?</Text>
+            <Text style={styles.greeting}>{t.home.greeting} {user?.name?.split(' ')[0]} ! 👋</Text>
+            <Text style={styles.subGreeting}>{t.home.subGreeting}</Text>
           </View>
         </View>
         <TouchableOpacity 
@@ -67,7 +71,7 @@ const HomeContent = () => {
         >
           <Text style={styles.tabIcon}>✨</Text>
           <Text style={[styles.tabText, activeTab === 'suggestions' && styles.activeTabText]}>
-            Suggestions d'Histoires
+            {t.home.suggestionsTab}
           </Text>
         </TouchableOpacity>
 
@@ -77,7 +81,7 @@ const HomeContent = () => {
         >
           <Text style={styles.tabIcon}>⭐</Text>
           <Text style={[styles.tabText, activeTab === 'completed' && styles.activeTabText]}>
-            Histoires Complétées
+            {t.home.completedTab}
           </Text>
         </TouchableOpacity>
       </View>
@@ -87,9 +91,9 @@ const HomeContent = () => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionIcon}>✨</Text>
-            <Text style={styles.sectionTitle}>Recommandé pour Toi</Text>
+            <Text style={styles.sectionTitle}>{t.home.recommendedTitle}</Text>
           </View>
-          <Text style={styles.sectionSubtitle}>Choisis une histoire et commence ta prochaine aventure !</Text>
+          <Text style={styles.sectionSubtitle}>{t.home.recommendedSubtitle}</Text>
           
           <ScrollView 
             horizontal 
@@ -112,9 +116,9 @@ const HomeContent = () => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionIcon}>⭐</Text>
-            <Text style={styles.sectionTitle}>Histoires Complétées</Text>
+            <Text style={styles.sectionTitle}>{t.home.completedTitle}</Text>
           </View>
-          <Text style={styles.sectionSubtitle}>Bravo ! Tu as terminé ces histoires ! 🎉</Text>
+          <Text style={styles.sectionSubtitle}>{t.home.completedSubtitle}</Text>
           
           <ScrollView 
             horizontal 

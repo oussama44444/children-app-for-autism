@@ -129,6 +129,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (updatedUserData) => {
+    try {
+      const updatedUser = { ...user, ...updatedUserData };
+      await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      return { success: true };
+    } catch (err) {
+      console.error('Update user error:', err);
+      return { success: false, error: err.message };
+    }
+  };
+
   const clearError = () => setError(null);
 
   return (
@@ -144,6 +156,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         clearError,
         completeLogin,
+        updateUser,
       }}
     >
       {children}

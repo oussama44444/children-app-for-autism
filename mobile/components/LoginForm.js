@@ -10,8 +10,12 @@ import {
   Keyboard,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 
 const LoginForm = ({ onSubmit, loading, error, clearError, navigation, onValidationError }) => {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +41,7 @@ const LoginForm = ({ onSubmit, loading, error, clearError, navigation, onValidat
 
     if (!email || !password) {
       if (onValidationError) {
-        onValidationError('Veuillez remplir tous les champs');
+        onValidationError(language === 'fr' ? 'Veuillez remplir tous les champs' : 'املا جميع الحقول');
       }
       return;
     }
@@ -57,8 +61,8 @@ const LoginForm = ({ onSubmit, loading, error, clearError, navigation, onValidat
           <Text style={styles.emoji}>😊</Text>
         </View>
 
-        <Text style={styles.title}>Bienvenue !</Text>
-        <Text style={styles.subtitle}>Jouons et apprenons ensemble 🎨</Text>
+        <Text style={styles.title}>{t.login.title}</Text>
+        <Text style={styles.subtitle}>{t.login.subtitle}</Text>
 
         {error && (
           <View style={styles.errorContainer}>
@@ -67,10 +71,10 @@ const LoginForm = ({ onSubmit, loading, error, clearError, navigation, onValidat
         )}
 
         {/* Your Name Label */}
-        <Text style={styles.label}>Ton Nom</Text>
+        <Text style={styles.label}>{t.login.email}</Text>
         <TextInput
           style={styles.input}
-          placeholder="Entre ton nom..."
+          placeholder={t.login.emailPlaceholder}
           placeholderTextColor="#B8B8D1"
           value={email}
           onChangeText={(text) => {
@@ -83,11 +87,11 @@ const LoginForm = ({ onSubmit, loading, error, clearError, navigation, onValidat
         />
 
         {/* Secret Code Label */}
-        <Text style={styles.label}>Code Secret</Text>
+        <Text style={styles.label}>{t.login.password}</Text>
         <View style={styles.passwordContainer}>
           <TextInput
             style={styles.passwordInput}
-            placeholder="Entre ton code secret..."
+            placeholder={t.login.passwordPlaceholder}
             placeholderTextColor="#B8B8D1"
             value={password}
             onChangeText={(text) => {
@@ -122,7 +126,7 @@ const LoginForm = ({ onSubmit, loading, error, clearError, navigation, onValidat
               <ActivityIndicator color="#fff" />
             ) : (
               <>
-                <Text style={styles.loginButtonText}>⚡ C'est Parti !</Text>
+                <Text style={styles.loginButtonText}>⚡ {t.login.loginButton}</Text>
               </>
             )}
           </LinearGradient>
@@ -151,9 +155,9 @@ const LoginForm = ({ onSubmit, loading, error, clearError, navigation, onValidat
 
         {/* Register Link */}
         <View style={styles.registerContainer}>
-          <Text style={styles.registerText}>Pas encore de compte ? </Text>
+          <Text style={styles.registerText}>{t.login.noAccount} </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.registerLink}>Inscris-toi</Text>
+            <Text style={styles.registerLink}>{t.login.registerLink}</Text>
           </TouchableOpacity>
         </View>
       </View>

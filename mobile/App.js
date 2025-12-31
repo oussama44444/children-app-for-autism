@@ -3,14 +3,25 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { useLanguage } from "./contexts/LanguageContext";
+import { getTranslation } from "./locales";
 import { StoriesProvider } from "./contexts/StoriesContext";
+import { SubscriptionProvider } from "./contexts/SubscriptionContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import WelcomeScreen from "./screens/WelcomeScreen";
+import LanguageSelectionScreen from "./screens/LanguageSelectionScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import HomeScreen from "./screens/HomeScreen";
 import StoriesListScreen from "./screens/StoriesListScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import SubscriptionScreen from "./screens/SubscriptionScreen";
+import PaymentScreen from "./screens/PaymentScreen";
+import SubscriptionDetailsScreen from "./screens/SubscriptionDetailsScreen";
+import EditProfileScreen from "./screens/EditProfileScreen";
+import HelpScreen from "./screens/HelpScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+import { View, Text, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -22,6 +33,8 @@ const Tab = createBottomTabNavigator();
 // Bottom Tab Navigator for authenticated users
 const MainTabs = () => {
   const insets = useSafeAreaInsets();
+  const { language } = useLanguage();
+  const t = getTranslation(language);
 
   return (
     <Tab.Navigator
@@ -55,7 +68,7 @@ const MainTabs = () => {
         name="HomeTab"
         component={HomeScreen}
         options={{
-          tabBarLabel: "Accueil",
+          tabBarLabel: t.tabs.home,
           tabBarIcon: ({ color, focused }) => (
             <View
               style={[
@@ -72,7 +85,7 @@ const MainTabs = () => {
         name="StoriesTab"
         component={StoriesListScreen}
         options={{
-          tabBarLabel: "Histoires",
+          tabBarLabel: t.tabs.stories,
           tabBarIcon: ({ color, focused }) => (
             <View
               style={[
@@ -89,7 +102,7 @@ const MainTabs = () => {
         name="ProfileTab"
         component={ProfileScreen}
         options={{
-          tabBarLabel: "Profil",
+          tabBarLabel: t.tabs.profile,
           tabBarIcon: ({ color, focused }) => (
             <View
               style={[
@@ -129,6 +142,13 @@ const Navigation = () => {
             }}
           />
           <Stack.Screen
+            name="LanguageSelection"
+            component={LanguageSelectionScreen}
+            options={{
+              animation: "slide_from_right",
+            }}
+          />
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{
@@ -144,13 +164,57 @@ const Navigation = () => {
           />
         </>
       ) : (
-        <Stack.Screen
-          name="Main"
-          component={MainTabs}
-          options={{
-            animation: "fade",
-          }}
-        />
+        <>
+          <Stack.Screen
+            name="Main"
+            component={MainTabs}
+            options={{
+              animation: "fade",
+            }}
+          />
+          <Stack.Screen
+            name="Subscription"
+            component={SubscriptionScreen}
+            options={{
+              animation: "slide_from_bottom",
+            }}
+          />
+          <Stack.Screen
+            name="Payment"
+            component={PaymentScreen}
+            options={{
+              animation: "slide_from_right",
+            }}
+          />
+          <Stack.Screen
+            name="SubscriptionDetails"
+            component={SubscriptionDetailsScreen}
+            options={{
+              animation: "slide_from_right",
+            }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfileScreen}
+            options={{
+              animation: "slide_from_right",
+            }}
+          />
+          <Stack.Screen
+            name="Help"
+            component={HelpScreen}
+            options={{
+              animation: "slide_from_right",
+            }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              animation: "slide_from_right",
+            }}
+          />
+        </>
       )}
     </Stack.Navigator>
   );
@@ -177,14 +241,18 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <StoriesProvider>
-        <NavigationContainer>
-          <StatusBar hidden={true} />
-          <Navigation />
-        </NavigationContainer>
-      </StoriesProvider>
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <StoriesProvider>
+          <SubscriptionProvider>
+            <NavigationContainer>
+              <StatusBar hidden={true} />
+              <Navigation />
+            </NavigationContainer>
+          </SubscriptionProvider>
+        </StoriesProvider>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }
 

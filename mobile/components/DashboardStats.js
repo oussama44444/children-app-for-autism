@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 
 const DashboardStats = ({ completedCount, totalPoints, streak }) => {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   return (
     <View style={styles.container}>
       <View style={[styles.statCard, { backgroundColor: '#FFFFFF' }]}>
@@ -9,7 +13,7 @@ const DashboardStats = ({ completedCount, totalPoints, streak }) => {
           <Text style={styles.icon}>🏆</Text>
         </View>
         <View style={styles.statContent}>
-          <Text style={styles.statLabel}>Total Points</Text>
+          <Text style={styles.statLabel}>{t.home.stats.totalPoints}</Text>
           <Text style={styles.statValue}>{totalPoints}</Text>
         </View>
       </View>
@@ -19,7 +23,7 @@ const DashboardStats = ({ completedCount, totalPoints, streak }) => {
           <Text style={styles.icon}>📚</Text>
         </View>
         <View style={styles.statContent}>
-          <Text style={styles.statLabel}>Histoires Complétées</Text>
+          <Text style={styles.statLabel}>{t.home.stats.completed}</Text>
           <Text style={styles.statValue}>{completedCount}</Text>
         </View>
       </View>
@@ -29,8 +33,8 @@ const DashboardStats = ({ completedCount, totalPoints, streak }) => {
           <Text style={styles.icon}>📈</Text>
         </View>
         <View style={styles.statContent}>
-          <Text style={styles.statLabel}>Séquence Actuelle</Text>
-          <Text style={styles.statValue}>{streak} jours</Text>
+          <Text style={styles.statLabel}>{t.home.stats.streak}</Text>
+          <Text style={styles.statValue}>{streak} {t.home.stats.days}</Text>
         </View>
       </View>
     </View>

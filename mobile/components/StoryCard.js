@@ -1,23 +1,29 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 
-const StoryCard = ({ story, onPress }) => {
+const StoryCard = ({ story, onPress, isLocked = false }) => {
   return (
     <TouchableOpacity 
       style={styles.container} 
       onPress={onPress}
       activeOpacity={0.9}
     >
-      <View style={styles.card}>
+      <View style={[styles.card, isLocked && styles.cardLocked]}>
         {/* TODO: BACKEND INTEGRATION - Replace with actual image */}
         <ImageBackground
           source={{ uri: story.imageUrl || 'https://via.placeholder.com/400x300' }}
           style={styles.imageBackground}
           imageStyle={styles.image}
         >
-          <View style={styles.overlay} />
+          <View style={[styles.overlay, isLocked && styles.overlayLocked]} />
           
-          {story.difficulty && (
+          {isLocked && (
+            <View style={styles.lockBadge}>
+              <Text style={styles.lockIcon}>🔒</Text>
+            </View>
+          )}
+          
+          {!isLocked && story.difficulty && (
             <View style={[
               styles.difficultyBadge, 
               { backgroundColor: story.difficulty === 'difficile' ? '#EF4444' : story.difficulty === 'moyen' ? '#F59E0B' : '#10B981' }
@@ -29,19 +35,29 @@ const StoryCard = ({ story, onPress }) => {
 
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.icon}>{story.emoji}</Text>
-            <Text style={styles.title} numberOfLines={2}>{story.title}</Text>
+            <Text style={[styles.icon, isLocked && styles.iconLocked]}>{story.emoji}</Text>
+            <Text style={[styles.title, isLocked && styles.titleLocked]} numberOfLines={2}>
+              {story.title}
+            </Text>
           </View>
           
-          <Text style={styles.description} numberOfLines={2}>
+          <Text style={[styles.description, isLocked && styles.descriptionLocked]} numberOfLines={2}>
             {story.description}
           </Text>
 
           <View style={styles.footer}>
-            <Text style={styles.category}>{story.category}</Text>
-            <View style={styles.pointsContainer}>
-              <Text style={styles.points}>{story.points} pts</Text>
-            </View>
+            <Text style={[styles.category, isLocked && styles.categoryLocked]}>
+              {story.category}
+            </Text>
+            {isLocked ? (
+              <View style={styles.premiumBadge}>
+                <Text style={styles.premiumText}>👑 PREMIUM</Text>
+              </View>
+            ) : (
+              <View style={styles.pointsContainer}>
+                <Text style={styles.points}>{story.points} pts</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -142,6 +158,53 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     color: '#1F2937',
+  },
+  cardLocked: {
+    opacity: 0.85,
+  },
+  overlayLocked: {
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  lockBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#A855F7',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  lockIcon: {
+    fontSize: 18,
+  },
+  iconLocked: {
+    opacity: 0.7,
+  },
+  titleLocked: {
+    color: '#6B7280',
+  },
+  descriptionLocked: {
+    color: '#9CA3AF',
+  },
+  categoryLocked: {
+    color: '#D1D5DB',
+  },
+  premiumBadge: {
+    backgroundColor: '#A855F7',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  premiumText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
 });
 

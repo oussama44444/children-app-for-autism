@@ -7,14 +7,30 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useStories } from '../contexts/StoriesContext';
+import { useSubscription } from '../contexts/SubscriptionContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 import StoryCard from './StoryCard';
+import PremiumModal from './PremiumModal';
 
 const StoriesListContent = () => {
+  const navigation = useNavigation();
   const { stories } = useStories();
+  const { isSubscribed } = useSubscription();
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const [filter, setFilter] = useState('all');
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   const handleStoryPress = (story) => {
+    // Check if story is premium and user is not subscribed
+    if (story.isPremium && !isSubscribed) {
+      setShowPremiumModal(true);
+      return;
+    }
+
     Alert.alert(
       story.title,
       'Cette fonctionnalité arrive bientôt ! 🎉',
@@ -22,18 +38,29 @@ const StoriesListContent = () => {
     );
   };
 
+  const handleSubscribePress = () => {
+    setShowPremiumModal(false);
+    // Navigate to subscription screen
+    navigation.navigate('Subscription');
+  };
+
   const filteredStories = stories.filter(story => {
     if (filter === 'all') return true;
     if (filter === 'new') return story.progress === 0 && !story.completed;
+    if (filter === 'premium') return story.isPremium;
+    if (filter === 'free') return !story.isPremium;
     return true;
   });
+
+  const premiumStoriesCount = stories.filter(s => s.isPremium).length;
+  const freeStoriesCount = stories.filter(s => !s.isPremium).length;
 
   return (
     <View style={styles.container}>
       {/* Header and Filters */}
       <View style={styles.headerRow}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>📚 Toutes les Histoires</Text>
+          <Text style={styles.headerTitle}>📚 {t.stories.title}</Text>
         </View>
 
         <View style={styles.filterContainer}>
@@ -43,10 +70,23 @@ const StoriesListContent = () => {
           >
             <Text style={styles.filterIcon}>🌟</Text>
             <Text style={[styles.filterText, filter === 'all' && styles.filterTextActive]}>
-              Toutes
+              {t.stories.all}
             </Text>
             <View style={styles.filterBadge}>
               <Text style={styles.filterBadgeText}>{stories.length}</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.filterButton, filter === 'free' && styles.filterButtonActive]}
+            onPress={() => setFilter('free')}
+          >
+            <Text style={styles.filterIcon}>🆓</Text>
+            <Text style={[styles.filterText, filter === 'free' && styles.filterTextActive]}>
+              {t.stories.free}
+            </Text>
+            <View style={styles.filterBadge}>
+              <Text style={styles.filterBadgeText}>{freeStoriesCount}</Text>
             </View>
           </TouchableOpacity>
 
@@ -56,8 +96,21 @@ const StoriesListContent = () => {
           >
             <Text style={styles.filterIcon}>✨</Text>
             <Text style={[styles.filterText, filter === 'new' && styles.filterTextActive]}>
-              Nouvelles
+              {t.stories.new}
             </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.filterButton, filter === 'premium' && styles.filterButtonActive]}
+            onPress={() => setFilter('premium')}
+          >
+            <Text style={styles.filterIcon}>👑</Text>
+            <Text style={[styles.filterText, filter === 'premium' && styles.filterTextActive]}>
+              {t.stories.premium}
+            </Text>
+            <View style={[styles.filterBadge, filter === 'premium' && styles.filterBadgePremium]}>
+              <Text style={styles.filterBadgeText}>{premiumStoriesCount}</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -74,11 +127,19 @@ const StoriesListContent = () => {
               <StoryCard
                 story={story}
                 onPress={() => handleStoryPress(story)}
+                isLocked={story.isPremium && !isSubscribed}
               />
             </View>
           ))}
         </View>
       </ScrollView>
+
+      {/* Premium Modal */}
+      <PremiumModal
+        visible={showPremiumModal}
+        onClose={() => setShowPremiumModal(false)}
+        onSubscribe={handleSubscribePress}
+      />
     </View>
   );
 };
@@ -154,6 +215,9 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: 'bold',
     color: '#FFFFFF',
+  },
+  filterBadgePremium: {
+    backgroundColor: '#FFD700',
   },
   listContainer: {
     flex: 1,

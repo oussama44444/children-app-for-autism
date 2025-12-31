@@ -10,8 +10,12 @@ import {
   Keyboard,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 
 const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onValidationError }) => {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -48,21 +52,21 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
 
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
       if (onValidationError) {
-        onValidationError('Veuillez remplir tous les champs');
+        onValidationError(language === 'fr' ? 'Veuillez remplir tous les champs' : 'املا جميع الحقول');
       }
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
       if (onValidationError) {
-        onValidationError('Les mots de passe ne correspondent pas');
+        onValidationError(language === 'fr' ? 'Les mots de passe ne correspondent pas' : 'كلمة السر ماتطابقش');
       }
       return;
     }
 
     if (formData.password.length < 6) {
       if (onValidationError) {
-        onValidationError('Le mot de passe doit contenir au moins 6 caractères');
+        onValidationError(language === 'fr' ? 'Le mot de passe doit contenir au moins 6 caractères' : 'كلمة السر لازم 6 حروف على الأقل');
       }
       return;
     }
@@ -88,8 +92,8 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
           <Text style={styles.emoji}>🎨</Text>
         </View>
 
-        <Text style={styles.title}>Crée ton Compte !</Text>
-        <Text style={styles.subtitle}>Commence l'aventure 🚀</Text>
+        <Text style={styles.title}>{t.register.title}</Text>
+        <Text style={styles.subtitle}>{t.register.subtitle}</Text>
 
         {error && (
           <View style={styles.errorContainer}>
@@ -97,30 +101,20 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
           </View>
         )}
 
-        <Text style={styles.label}>Ton Nom</Text>
+        <Text style={styles.label}>{t.register.name}</Text>
         <TextInput
           style={styles.input}
-          placeholder="Entre ton nom complet..."
+          placeholder={t.register.namePlaceholder}
           placeholderTextColor="#B8B8D1"
           value={formData.firstName}
           onChangeText={(text) => updateField('firstName', text)}
           autoCapitalize="words"
         />
 
-        <Text style={styles.label}>Ton Prénom</Text>
+        <Text style={styles.label}>{t.register.email}</Text>
         <TextInput
           style={styles.input}
-          placeholder="Entre ton prénom complet..."
-          placeholderTextColor="#B8B8D1"
-          value={formData.lastName}
-          onChangeText={(text) => updateField('lastName', text)}
-          autoCapitalize="words"
-        />
-
-        <Text style={styles.label}>Ton Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Entre ton email..."
+          placeholder={t.register.emailPlaceholder}
           placeholderTextColor="#B8B8D1"
           value={formData.email}
           onChangeText={(text) => updateField('email', text)}
@@ -129,11 +123,11 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
           autoCorrect={false}
         />
 
-        <Text style={styles.label}>Code Secret</Text>
+        <Text style={styles.label}>{t.register.password}</Text>
         <View style={styles.passwordContainer}>
           <TextInput
             style={styles.passwordInput}
-            placeholder="Crée un code secret..."
+            placeholder={t.register.passwordPlaceholder}
             placeholderTextColor="#B8B8D1"
             value={formData.password}
             onChangeText={(text) => updateField('password', text)}
@@ -182,19 +176,15 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.registerButtonText}>🎉 Créer mon Compte</Text>
+              <Text style={styles.registerButtonText}>🎉 {t.register.registerButton}</Text>
             )}
           </LinearGradient>
         </TouchableOpacity>
 
-        <View style={styles.helpContainer}>
-          <Text style={styles.helpText}>Besoin d'aide ? Demande à un parent ! 👨‍👩‍👧</Text>
-        </View>
-
         <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Déjà un compte ? </Text>
+          <Text style={styles.loginText}>{t.register.hasAccount} </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.loginLink}>Connecte-toi</Text>
+            <Text style={styles.loginLink}>{t.register.loginLink}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { BackHandler } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 import AuthScreenContainer from '../components/AuthScreenContainer';
 import LoginForm from '../components/LoginForm';
 import SuccessNotification from '../components/SuccessNotification';
@@ -8,6 +10,8 @@ import ErrorNotification from '../components/ErrorNotification';
 
 const LoginScreen = ({ navigation }) => {
   const { login, loading, error, clearError, completeLogin } = useAuth();
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -64,7 +68,7 @@ const LoginScreen = ({ navigation }) => {
       />
       <SuccessNotification 
         visible={showSuccess}
-        message="Super ! Bienvenue dans l'aventure ! 🎊"
+        message={language === 'fr' ? 'Super ! Bienvenue dans l\'aventure ! 🎊' : 'مرحبا بيك في المغامرة! 🎊'}
         onHide={handleNotificationHide}
       />
       <ErrorNotification 

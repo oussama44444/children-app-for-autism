@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 
 const WelcomeContent = () => {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
@@ -37,8 +41,8 @@ const WelcomeContent = () => {
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Bienvenue à Sensaura</Text>
-      <Text style={styles.subtitle}>Écoute, Apprends, et Imagine ! ✨</Text>
+      <Text style={styles.title}>{t.welcome.title}</Text>
+      <Text style={styles.subtitle}>{t.welcome.subtitle}</Text>
 
     
     

@@ -2,8 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import WelcomeContent from '../components/WelcomeContent';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getTranslation } from '../locales';
 
 const WelcomeScreen = ({ navigation }) => {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
   const floatAnim1 = useRef(new Animated.Value(0)).current;
   const floatAnim2 = useRef(new Animated.Value(0)).current;
   const floatAnim3 = useRef(new Animated.Value(0)).current;
@@ -95,14 +99,16 @@ const WelcomeScreen = ({ navigation }) => {
         {/* Get Started Button */}
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.navigate('LanguageSelection')}
           activeOpacity={0.8}
         >
           <LinearGradient
             colors={['#FFFFFF', '#FFF5F7']}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>📖 Commencer l'Histoire</Text>
+            <Text style={styles.buttonText}>
+              📖 {language === 'fr' ? "Commencer l'Histoire" : 'ابدا الحكاية'}
+            </Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
