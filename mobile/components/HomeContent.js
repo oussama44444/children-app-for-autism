@@ -100,14 +100,16 @@ const HomeContent = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.storiesContainer}
           >
-            {suggestedStories.map(story => (
-              <View key={story.id} style={styles.storyCardWrapper}>
-                <StoryCard
-                  story={story}
-                  onPress={() => handleStoryPress(story)}
-                />
-              </View>
-            ))}
+                {suggestedStories
+                  .filter(s => (s.difficulty || '').toString().toLowerCase() === 'easy')
+                  .map(story => (
+                    <View key={story.id} style={styles.storyCardWrapper}>
+                      <StoryCard
+                        story={story}
+                        onPress={() => handleStoryPress(story)}
+                      />
+                    </View>
+                ))}
           </ScrollView>
         </View>
       )}
