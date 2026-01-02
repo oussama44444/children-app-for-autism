@@ -111,6 +111,16 @@ const RegisterForm = ({ onSubmit, loading, error, clearError, navigation, onVali
           autoCapitalize="words"
         />
 
+        <Text style={styles.label}>{language === 'fr' ? 'Nom de famille' : 'اللقب'}</Text>
+        <TextInput
+          style={styles.input}
+          placeholder={language === 'fr' ? 'Ton nom de famille...' : 'لقبك...'}
+          placeholderTextColor="#B8B8D1"
+          value={formData.lastName}
+          onChangeText={(text) => updateField('lastName', text)}
+          autoCapitalize="words"
+        />
+
         <Text style={styles.label}>{t.register.email}</Text>
         <TextInput
           style={styles.input}

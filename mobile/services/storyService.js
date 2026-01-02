@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://192.168.1.6:5000';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://192.168.100.23:5000';
 const api = axios.create({ baseURL: `${BACKEND_URL}/stories` });
 
 const authHeader = (token) => (token ? { Authorization: `Bearer ${token}` } : {});

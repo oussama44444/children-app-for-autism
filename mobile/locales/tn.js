@@ -20,7 +20,7 @@ export const tn = {
 
   // Login
   login: {
-    title: 'فرحانين بروجوعك!',
+    title: 'مرحبا بيك !',
     subtitle: 'ادخل باش تكمل المغامرة متاعك',
     email: 'الإيميل',
     emailPlaceholder: 'email@example.com',
@@ -77,6 +77,20 @@ export const tn = {
     premium: 'بريميوم',
     locked: 'مقفولة',
     premiumBadge: 'بريميوم',
+  },
+
+  // Story Details Modal
+  storyDetails: {
+    description: 'الوصف',
+    difficulty: 'الصعوبة',
+    points: 'النقاط',
+    duration: 'المدة',
+    ageRange: 'العمر',
+    objectives: 'الأهداف',
+    startButton: 'ابدا',
+    easy: 'ساهل',
+    medium: 'متوسط',
+    hard: 'صعيب',
   },
 
   // Premium Modal
@@ -164,7 +178,7 @@ export const tn = {
     menu: {
       editProfile: 'عدّل البروفايل',
       subscription: 'الاشتراك',
-      preferences: 'التفضيلات',
+      preferences: 'الاعدادات',
       help: 'المساعدة',
       logout: 'خروج',
       active: 'نشط',
@@ -289,6 +303,22 @@ export const tn = {
     title: 'إعدادات',
     language: 'اللغة',
     languageInfo: 'تغيير اللغة باش يتطبّق مباشرة على التطبيق الكل.',
+  },
+
+  // Congratulations
+  congratulations: {
+    title:'صحيت !',
+    message: '  معلم زايد 💪',
+    points: 'نقاط',
+    backToHome: 'ارجع للرئيسية 🏠',
+  },
+
+  // Question Screen
+  question: {
+    hint: 'مساعدة',
+    replay: 'أعد السماع',
+    questionOf: 'سؤال {current} من {total}',
+    optionLabels: ['أ', 'ب', 'ج', 'د'],
   },
 
   // Common

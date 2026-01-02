@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { getTranslation } from '../locales';
 import StoryCard from './StoryCard';
 import PremiumModal from './PremiumModal';
+import StoryDetailsModal from './StoryDetailsModal';
 
 const StoriesListContent = () => {
   const navigation = useNavigation();
@@ -23,6 +24,23 @@ const StoriesListContent = () => {
   const t = getTranslation(language);
   const [filter, setFilter] = useState('all');
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [selectedStory, setSelectedStory] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Use stories from backend (includes both free and premium)
+  const allStories = useMemo(() => stories, [stories]);
+
+  // Enhance stories with hardcoded details
+  const enhanceStoryWithDetails = (story) => ({
+    ...story,
+    points: story.points || 15,
+    duration: story.duration || '5-10',
+    ageRange: story.ageRange || '6-12',
+    difficulty: story.difficulty || (language === 'tn' ? 'ساهل' : 'facile'),
+    objectives: story.objectives || (language === 'tn' 
+      ? 'هذي الحكاية باش تعلّم الطفل مهارات التواصل و الفهم الاجتماعي من خلال مواقف حياتية ممتعة.'
+      : 'Cette histoire aide votre enfant à développer des compétences de communication et de compréhension sociale à travers des situations amusantes de la vie quotidienne.'),
+  });
 
   const handleStoryPress = (story) => {
     // Check if story is premium and user is not subscribed
@@ -31,11 +49,19 @@ const StoriesListContent = () => {
       return;
     }
 
-    Alert.alert(
-      story.title,
-      'Cette fonctionnalité arrive bientôt ! 🎉',
-      [{ text: 'D\'accord', style: 'default' }]
-    );
+    const enhancedStory = enhanceStoryWithDetails(story);
+    setSelectedStory(enhancedStory);
+    setIsModalVisible(true);
+  };
+
+  const handleStartStory = () => {
+    setIsModalVisible(false);
+    navigation.navigate('StoryPlayer', { story: selectedStory });
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setSelectedStory(null);
   };
 
   const handleSubscribePress = () => {
@@ -46,7 +72,7 @@ const StoriesListContent = () => {
 
   const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
   const now = Date.now();
-  const filteredStories = stories.filter(story => {
+  const filteredStories = allStories.filter(story => {
     if (filter === 'all') return true;
     if (filter === 'new') {
       if (!story.createdAt) return false;
@@ -58,9 +84,9 @@ const StoriesListContent = () => {
     return true;
   });
 
-  const premiumStoriesCount = stories.filter(s => !!s.isPremium).length;
-  const freeStoriesCount = stories.filter(s => !s.isPremium).length;
-  const newStoriesCount = stories.filter(s => {
+  const premiumStoriesCount = allStories.filter(s => !!s.isPremium).length;
+  const freeStoriesCount = allStories.filter(s => !s.isPremium).length;
+  const newStoriesCount = allStories.filter(s => {
     if (!s.createdAt) return false;
     const created = new Date(s.createdAt).getTime();
     return (now - created) <= thirtyDaysMs;
@@ -84,7 +110,7 @@ const StoriesListContent = () => {
               {t.stories.all}
             </Text>
             <View style={styles.filterBadge}>
-              <Text style={styles.filterBadgeText}>{stories.length}</Text>
+              <Text style={styles.filterBadgeText}>{allStories.length}</Text>
             </View>
           </TouchableOpacity>
 
@@ -153,6 +179,14 @@ const StoriesListContent = () => {
         visible={showPremiumModal}
         onClose={() => setShowPremiumModal(false)}
         onSubscribe={handleSubscribePress}
+      />
+
+      {/* Story Details Modal */}
+      <StoryDetailsModal
+        visible={isModalVisible}
+        story={selectedStory}
+        onClose={handleCloseModal}
+        onStart={handleStartStory}
       />
     </View>
   );

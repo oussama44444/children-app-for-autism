@@ -76,7 +76,9 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
+      console.log('[AuthContext.register] Starting registration...', { email: userData.email });
       const res = await userService.register(userData);
+      console.log('[AuthContext.register] Registration response:', res);
 
       // If backend does not return token/user on register, try to login immediately
       if (res && (res.jwt || res.user)) {
@@ -99,8 +101,13 @@ export const AuthProvider = ({ children }) => {
 
       // Attempt to auto-login after registration using provided credentials
       if (userData.email && userData.password) {
+        console.log('[AuthContext.register] Attempting auto-login...');
         const loginResult = await login({ email: userData.email, password: userData.password }, delayNavigation);
+        console.log('[AuthContext.register] Auto-login result:', loginResult);
         if (loginResult.success) return loginResult; // propagate user/token when delayNavigation is used
+        // If auto-login failed, still consider registration successful
+        console.log('[AuthContext.register] Auto-login failed but registration succeeded');
+        return { success: true, message: res.message || 'Registration successful. Please login.' };
       }
 
       // If registration succeeded but auto-login wasn't possible

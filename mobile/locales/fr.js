@@ -20,7 +20,7 @@ export const fr = {
 
   // Login
   login: {
-    title: 'Content de te revoir !',
+    title: 'Bienvenue !',
     subtitle: 'Connecte-toi pour continuer ton aventure',
     email: 'Email',
     emailPlaceholder: 'ton@email.com',
@@ -77,6 +77,20 @@ export const fr = {
     premium: 'Premium',
     locked: 'Verrouillée',
     premiumBadge: 'Premium',
+  },
+
+  // Story Details Modal
+  storyDetails: {
+    description: 'Description',
+    difficulty: 'Difficulté',
+    points: 'Points',
+    duration: 'Durée',
+    ageRange: 'Âge',
+    objectives: 'Objectifs',
+    startButton: 'Commencer',
+    easy: 'Facile',
+    medium: 'Moyen',
+    hard: 'Difficile',
   },
 
   // Premium Modal
@@ -164,7 +178,7 @@ export const fr = {
     menu: {
       editProfile: 'Modifier le Profil',
       subscription: 'Abonnement',
-      preferences: 'Préférences',
+      preferences: 'Paramètres',
       help: 'Aide',
       logout: 'Déconnexion',
       active: 'Actif',
@@ -289,6 +303,22 @@ export const fr = {
     title: 'Paramètres',
     language: 'Langue',
     languageInfo: 'Le changement de langue sera appliqué immédiatement à toute l\'application.',
+  },
+
+  // Congratulations
+  congratulations: {
+    title: 'Excellent Travail !',
+    message: 'Tu es une superstar ! 💪',
+    points: 'points',
+    backToHome: 'Retour à l\'Accueil 🏠',
+  },
+
+  // Question Screen
+  question: {
+    hint: 'Indice',
+    replay: 'Rejouer',
+    questionOf: 'Question {current} sur {total}',
+    optionLabels: ['A', 'B', 'C', 'D'],
   },
 
   // Common

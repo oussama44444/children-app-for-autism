@@ -21,6 +21,7 @@ import SubscriptionDetailsScreen from "./screens/SubscriptionDetailsScreen";
 import EditProfileScreen from "./screens/EditProfileScreen";
 import HelpScreen from "./screens/HelpScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import StoryPlayerScreen from "./screens/StoryPlayerScreen";
 import { View, Text, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -213,6 +214,14 @@ const Navigation = () => {
             component={SettingsScreen}
             options={{
               animation: "slide_from_right",
+            }}
+          />
+          <Stack.Screen
+            name="StoryPlayer"
+            component={StoryPlayerScreen}
+            options={{
+              animation: "slide_from_bottom",
+              presentation: "fullScreenModal",
             }}
           />
         </>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,30 +6,85 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
 import { useStories } from '../contexts/StoriesContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getTranslation } from '../locales';
 import StoryCard from './StoryCard';
 import DashboardStats from './DashboardStats';
+import StoryDetailsModal from './StoryDetailsModal';
+import { getProfileAllData } from '../services/userService';
 
 const HomeContent = () => {
-  const { user, logout } = useAuth();
+  const navigation = useNavigation();
+  const { user, logout, token } = useAuth();
   const { stories, completedStories, suggestedStories } = useStories();
   const { language } = useLanguage();
   const t = getTranslation(language);
   const [activeTab, setActiveTab] = useState('suggestions');
+  const [userName, setUserName] = useState(user?.name || '');
+  const [loadingName, setLoadingName] = useState(false);
+  const [selectedStory, setSelectedStory] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (token && !userName) {
+        setLoadingName(true);
+        try {
+          const data = await getProfileAllData(token);
+          // The API returns the user object directly
+          if (data && (data.firstName || data.name)) {
+            const fullName = data.name || `${data.firstName || ''} ${data.lastName || ''}`.trim();
+            setUserName(fullName);
+          }
+        } catch (error) {
+          console.error('Error fetching user name:', error);
+          // Fallback to user from context if API fails
+          if (user?.name) {
+            setUserName(user.name);
+          }
+        } finally {
+          setLoadingName(false);
+        }
+      }
+    };
+
+    fetchUserName();
+  }, [token]);
 
   const currentStreak = 3;
   const totalPoints = completedStories.length * 10 + completedStories.reduce((sum, story) => sum + (story.points || 0), 0);
 
+  // Enhance stories with hardcoded details
+  const enhanceStoryWithDetails = (story) => ({
+    ...story,
+    points: story.points || 15,
+    duration: story.duration || '5-10',
+    ageRange: story.ageRange || '6-12',
+    difficulty: story.difficulty || 'facile',
+    objectives: story.objectives || (language === 'tn' 
+      ? 'هذي الحكاية باش تعلّم الطفل مهارات التواصل و الفهم الاجتماعي من خلال مواقف حياتية ممتعة.'
+      : 'Cette histoire aide votre enfant à développer des compétences de communication et de compréhension sociale à travers des situations amusantes de la vie quotidienne.'),
+  });
+
   const handleStoryPress = (story) => {
-    Alert.alert(
-      story.title,
-      'Cette fonctionnalité arrive bientôt ! 🎉',
-      [{ text: 'D\'accord', style: 'default' }]
-    );
+    const enhancedStory = enhanceStoryWithDetails(story);
+    setSelectedStory(enhancedStory);
+    setIsModalVisible(true);
+  };
+
+  const handleStartStory = () => {
+    setIsModalVisible(false);
+    navigation.navigate('StoryPlayer', { story: selectedStory });
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setSelectedStory(null);
   };
 
   return (
@@ -44,7 +99,9 @@ const HomeContent = () => {
             <Text style={styles.character}>{user?.avatar || '🎭'}</Text>
           </View>
           <View style={styles.greetingContainer}>
-            <Text style={styles.greeting}>{t.home.greeting} {user?.name?.split(' ')[0]} ! 👋</Text>
+            <Text style={styles.greeting}>
+              {t.home.greeting} {loadingName ? '...' : (userName?.split(' ')[0] || user?.name?.split(' ')[0] || '')} ! 👋
+            </Text>
             <Text style={styles.subGreeting}>{t.home.subGreeting}</Text>
           </View>
         </View>
@@ -140,6 +197,14 @@ const HomeContent = () => {
       )}
 
       <View style={styles.bottomPadding} />
+
+      {/* Story Details Modal */}
+      <StoryDetailsModal
+        visible={isModalVisible}
+        story={selectedStory}
+        onClose={handleCloseModal}
+        onStart={handleStartStory}
+      />
     </ScrollView>
   );
 };

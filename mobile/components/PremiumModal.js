@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -23,7 +24,9 @@ const PremiumModal = ({ visible, onClose, onSubscribe }) => {
       transparent
       animationType="fade"
       onRequestClose={onClose}
+      statusBarTranslucent={true}
     >
+      <StatusBar translucent backgroundColor="transparent" />
       <Pressable style={styles.backdrop} onPress={onClose}>
         <Pressable style={styles.modalContainer} onPress={(e) => e.stopPropagation()}>
           <LinearGradient
@@ -83,8 +86,9 @@ const PremiumModal = ({ visible, onClose, onSubscribe }) => {
 
 const styles = StyleSheet.create({
   backdrop: {
-    width: width,
-    height: height,
+    flex: 1,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
