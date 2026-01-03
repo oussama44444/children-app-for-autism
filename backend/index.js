@@ -6,6 +6,7 @@ const storiesRoute = require("./routes/stories");
 const userRoute = require("./routes/user");
 const profileRoute = require("./routes/profile");
 const adminRoute = require("./routes/admin");
+const transactionsRoute = require("./routes/transactions");
 const os = require("os");
 
 const app = express();
@@ -29,6 +30,7 @@ app.use("/stories", storiesRoute);
 app.use("/user", userRoute);
 app.use("/profile", profileRoute);
 app.use("/admin", adminRoute);
+app.use("/transactions", transactionsRoute);
 // Default route
 app.get("/", (req, res) => {
   res.send("🚀 Autism Stories Backend is Running!");

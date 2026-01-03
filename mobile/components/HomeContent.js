@@ -66,7 +66,12 @@ const HomeContent = () => {
   }, [token, ]);
 
   const currentStreak = 3;
-  const totalPoints = completedStories.length * 10 + completedStories.reduce((sum, story) => sum + (story.points || 0), 0);
+  // prefer server truth for user points and completed stories; fall back to local stories state
+  const userCompletedList = (user && (user.completedStories || user.completed_stories)) ? (user.completedStories || user.completed_stories) : null;
+  const completedCount = userCompletedList ? userCompletedList.length : completedStories.length;
+  const totalPoints = (user && typeof user.points === 'number')
+    ? user.points
+    : (completedStories.length * 10 + completedStories.reduce((sum, story) => sum + (story.points || 0), 0));
 
   // Enhance stories with hardcoded details
   const enhanceStoryWithDetails = (story) => ({
@@ -141,7 +146,7 @@ const HomeContent = () => {
 
       {/* Stats */}
       <DashboardStats 
-        completedCount={completedStories.length}
+        completedCount={completedCount}
         totalPoints={totalPoints}
         streak={currentStreak}
       />

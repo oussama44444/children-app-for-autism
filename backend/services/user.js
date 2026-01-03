@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const userModel = require("../models/user");
+const storyModel = require("../models/story");
 const accountveriftokenModel = require("../models/accountveriftoken");
 const resetpasswordtokenModel = require("../models/resetpasswordtoken");
 
@@ -260,5 +261,40 @@ exports.resetPassword = async (newPassword, token) => {
     return { success: true, message: "Password reset successfully" };
   } catch (error) {
     throw new Error(error.message);
+  }
+};
+
+// Add points to a user (incremental)
+exports.addPoints = async (userId, pointsToAdd = 0,storyId) => {
+  try {
+    if (!userId) throw new Error('User id required');
+    const user = await userModel.findById(userId);
+    if (!user) throw new Error('User not found');
+
+    // If storyId provided, avoid double-counting
+    if (storyId) {
+      // ensure CompletedStories array exists
+      user.completedStories = user.completedStories || [];
+      // normalize ids to strings for comparison
+      const alreadyCompleted = user.completedStories.some(sid => String(sid) === String(storyId));
+      if (alreadyCompleted) {
+        return user; // no-op if already completed
+      }
+      // mark story as completed
+      user.completedStories.push(storyId);
+    }
+
+    // add points
+    const add = Number(pointsToAdd || 0);
+    let pointsAdded = 0;
+    if (add) {
+      user.points = (user.points || 0) + add;
+      pointsAdded = add;
+    }
+
+    await user.save();
+    return { user, pointsAdded };
+  } catch (err) {
+    throw new Error('Could not add points: ' + err.message);
   }
 };

@@ -19,7 +19,7 @@ import CongratulationsScreen from '../components/CongratulationsScreen';
 
 const StoryPlayerScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { stories, getStoryById } = useStories();
+  const { stories, getStoryById, completeStory } = useStories();
   const { language } = useLanguage();
   const { story: routeStory, storyId } = route.params || {};
   // local resolved story state (may be loaded from context or fetched)
@@ -100,6 +100,30 @@ const StoryPlayerScreen = ({ route }) => {
       })();
     };
   }, [currentPhase, currentQuestionIndex, segments]);
+
+  // When the player reaches the congratulations phase, mark story completed and award points
+  useEffect(() => {
+    if (currentPhase === 'congratulations') {
+      (async () => {
+        try {
+          const sid = resolvedStory?.id || resolvedStory?._id;
+          if (!sid) return;
+          // prevent duplicate completion when story already marked completed locally
+          if (resolvedStory && resolvedStory.completed) {
+            console.log('StoryPlayerScreen: story already completed locally, skipping completeStory call', sid);
+            return;
+          }
+          if (sid && completeStory) {
+            console.log('StoryPlayerScreen: completing story', sid);
+            const result = await completeStory(sid);
+            console.log('Story completion result:', result);
+          }
+        } catch (e) {
+          console.warn('Error while completing story:', e);
+        }
+      })();
+    }
+  }, [currentPhase, resolvedStory]);
 
   const playAudio = async () => {
     try {
@@ -254,8 +278,23 @@ const StoryPlayerScreen = ({ route }) => {
       // Wait 1.5 seconds then move to next segment/question or finish
       setTimeout(() => {
         if (currentQuestionIndex < (segments.length - 1)) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
-          fadeInVideo();
+          // first fade the question out, then update the question index and switch back to video
+          Animated.timing(questionFadeAnim, {
+            toValue: 0,
+            duration: 400,
+            useNativeDriver: true,
+            easing: Easing.inOut(Easing.ease),
+          }).start(() => {
+            // advance to next question index only after fade completes
+            setCurrentQuestionIndex(prev => prev + 1);
+            setCurrentPhase('video');
+            Animated.timing(videoFadeAnim, {
+              toValue: 1,
+              duration: 800,
+              useNativeDriver: true,
+              easing: Easing.inOut(Easing.ease),
+            }).start();
+          });
         } else {
           // Story completed - show congratulations
           setCurrentPhase('congratulations');

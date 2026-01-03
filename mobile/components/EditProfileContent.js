@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../contexts/AuthContext';
 import {useUser}  from '../contexts/userContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfileContent = ({ navigation }) => {
   const { user,} = useAuth();
@@ -21,6 +22,23 @@ const EditProfileContent = ({ navigation }) => {
   const [phone, setPhone] = useState(user?.phone || '');
   const [age, setAge] = useState(user?.age?.toString() || '');
   const [saving, setSaving] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar || '🦁');
+
+  useEffect(() => {
+    const loadAvatar = async () => {
+      try {
+        const stored = await AsyncStorage.getItem('userAvatar');
+        if (stored) {
+          setSelectedAvatar(stored);
+        } else if (user?.avatar) {
+          setSelectedAvatar(user.avatar);
+        }
+      } catch (e) {
+        console.warn('Failed to load stored avatar', e);
+      }
+    };
+    loadAvatar();
+  }, [user]);
 
   const handleSave = async () => {
     // Validation
@@ -53,12 +71,17 @@ const EditProfileContent = ({ navigation }) => {
         email: email.trim(),
         phone: phone.trim(),
         age: parseInt(age, 10) || 0,
-        //avatar: selectedAvatar,
+        avatar: selectedAvatar,
       };
 
       const result = await updateProfile(updatedData);
       console.log('updateProfile result:', result);
       if (result && result.success) {
+        try {
+          await AsyncStorage.setItem('userAvatar', selectedAvatar);
+        } catch (e) {
+          console.warn('Failed to save avatar locally', e);
+        }
         Alert.alert(
           'Succès ! 🎉',
           'Votre profil a été mis à jour avec succès.',
@@ -86,7 +109,7 @@ const EditProfileContent = ({ navigation }) => {
     '🦄', '🐷', '🐮', '🦆', '🐧', '🦜', '🦋', '🐝',
     '🐢', '🦖', '🦕', '🐙', '🦀', '🐬', '🦈', '🐳'
   ];
-  const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar || '🦁');
+ 
 
   return (
     <ScrollView

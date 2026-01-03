@@ -137,30 +137,6 @@ export const UserProvider = ({ children }) => {
       }
     };
 
-  // 🔹 Get full profile data from backend and update local user
-  const getProfileAllData = async (providedToken) => {
-    const useToken = providedToken || token;
-    if (!useToken) {
-      return null;
-    }
-
-    try {
-      const data = await userService.getProfileAllData(useToken);
-      if (data) {
-        setUser(data);
-        try {
-          await AsyncStorage.setItem('user', JSON.stringify(data));
-        } catch (err) {
-          console.error('Failed to persist profile to storage:', err);
-        }
-      }
-      return data;
-    } catch (err) {
-      console.error('Error fetching full profile data:', err);
-      return null;
-    }
-  };
-
 
 
   return (
@@ -176,7 +152,6 @@ export const UserProvider = ({ children }) => {
         logout,
         loading,
         updateProfile,
-        getProfileAllData,
         users
       }}
     >

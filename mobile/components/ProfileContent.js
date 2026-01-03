@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,10 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../contexts/AuthContext';
 import { useSubscription } from '../contexts/SubscriptionContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getTranslation } from '../locales';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileContent = ({ onLogout }) => {
   const { user } = useAuth();
@@ -20,6 +21,28 @@ const ProfileContent = ({ onLogout }) => {
   const navigation = useNavigation();
   const { language } = useLanguage();
   const t = getTranslation(language);
+
+  const [localAvatar, setLocalAvatar] = useState('🦁');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let active = true;
+      const loadAvatar = async () => {
+        try {
+          const stored = await AsyncStorage.getItem('userAvatar');
+          if (!active) return;
+          if (stored) setLocalAvatar(stored);
+          else if (user?.avatar) setLocalAvatar(user.avatar);
+        } catch (e) {
+          console.warn('Failed to load avatar', e);
+        }
+      };
+      loadAvatar();
+      return () => {
+        active = false;
+      };
+    }, [user])
+  );
 
   const menuItems = [
     { label: t.profile.menu.editProfile, emoji: '✏️', action: 'edit' },
@@ -67,7 +90,7 @@ const ProfileContent = ({ onLogout }) => {
               colors={['#FFF', '#F3E8FF']}
               style={styles.avatarGradient}
             >
-              <Text style={styles.avatarEmoji}>🦁</Text>
+              <Text style={styles.avatarEmoji}>{localAvatar}</Text>
             </LinearGradient>
             <TouchableOpacity style={styles.editAvatarButton}>
               <Text style={styles.editAvatarEmoji}>📷</Text>

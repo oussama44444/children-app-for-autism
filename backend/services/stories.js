@@ -1,5 +1,6 @@
 const cloudinary = require('../config/cloudinary');
 const Story = require('../models/story');
+const userService = require('./user');
 
 async function getAllStories(language, page = 1, limit = 20, includePremium = true) {
   // ensure numeric values
@@ -238,6 +239,27 @@ async function deleteStory(id) {
   return { id };
 }
 
+// Mark story as completed for a user and award points
+async function completeStoryForUser(storyId, userId) {
+  const story = await Story.findById(storyId);
+  if (!story) {
+    const err = new Error('Story not found');
+    err.status = 404;
+    throw err;
+  }
+
+  const points = Number(story.points || 0);
+  let pointsAdded = 0;
+  if (points > 0) {
+    // delegate to user service to increment points
+    const res = await userService.addPoints(userId, points, storyId);
+    pointsAdded = res?.pointsAdded || 0;
+  }
+
+  // Optionally: you might want to track per-user completion here
+  return { storyId, userId, pointsAdded };
+}
+
 module.exports = {
   getAllStories,
   getStoryById,
@@ -246,4 +268,5 @@ module.exports = {
   uploadAudio,
   uploadImage,
   deleteStory,
+  completeStoryForUser,
 };
